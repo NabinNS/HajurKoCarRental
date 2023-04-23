@@ -36,6 +36,12 @@
 
         </div>
         <div class="mb-3">
+            <label asp-for="CarImageUrl"></label>
+            <input asp-for="CarImageUrl" class="form-control" />
+            <span asp-validation-for="CarImageUrl" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3">
             <label asp-for="IsAvailable"></label>
             <div>
                 <label><input asp-for="IsAvailable" type="radio" value="true" checked />Yes</label>

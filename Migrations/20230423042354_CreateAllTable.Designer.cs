@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HajurKoCarRental.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230422065933_CreateTablesToDatabase")]
-    partial class CreateTablesToDatabase
+    [Migration("20230423042354_CreateAllTable")]
+    partial class CreateAllTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace HajurKoCarRental.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarID"), 1L, 1);
+
+                    b.Property<string>("CarImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");

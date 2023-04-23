@@ -46,12 +46,27 @@ namespace HajurKoCarRental.Controllers
         }
         //Post
         [HttpPost]
-        public IActionResult Edit(Car obj)
+        public IActionResult Edit(Car car)
         {
-            _db.Cars.Update(obj);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
 
+            var carFromDb = _db.Cars.Find(car.CarID); // Find the existing car object from the database
+            if (carFromDb != null)
+            {
+                carFromDb.Manufacturer = car.Manufacturer; // Update the car properties with the new values
+                carFromDb.Model = car.Model;
+                carFromDb.Color = car.Color;
+                carFromDb.RentalRate = car.RentalRate;
+                carFromDb.VehicleNo = car.VehicleNo;
+                carFromDb.IsAvailable = car.IsAvailable;
+                carFromDb.CarImageUrl = car.CarImageUrl;
+
+                _db.Cars.Update(carFromDb); // Update the car object in the database
+                _db.SaveChanges();
+
+                return RedirectToAction("Index"); // Redirect to the index action
+            }
+
+            return NotFound(); // Car
         }
         public IActionResult Delete(int? id)
         {
@@ -68,5 +83,17 @@ namespace HajurKoCarRental.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public IActionResult ViewCar(int? id)
+        {
+            var carFromDb = _db.Cars.Find(id);
+            if (carFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(carFromDb);
+        }
+
     }
 }
