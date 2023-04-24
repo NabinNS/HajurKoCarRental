@@ -50,11 +50,10 @@
                 </td>
                 <td>
                     <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.CarID" class="anchor-size text-success"><i class="fas fa-edit"></i></a>
-                    <a asp-controller="Car" asp-action="Delete" asp-route-id="@car.CarID" class="anchor-size text-danger"><i class="fa fa-trash"></i></a>
+                    <a onclick="deleteCar('@car.CarID')" class="anchor-size text-danger"><i class="fa fa-trash"></i></a>
+
                     <a asp-controller="Car" asp-action="ViewCar" asp-route-id="@car.CarID" class="anchor-size text-primary"><i class="fa-solid fa-eye"></i></a>
                   
-
-
                 </td>
             </tr>
         }
@@ -66,5 +65,34 @@
         $(document).ready(function () {
             $('#cartable').DataTable()
         });
+    </script>
+    <script>
+        function deleteCar(carId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Make an AJAX call to delete the car from the server
+                    $.ajax({
+                        type: "POST",
+                        url: "/Car/Delete/" + carId,
+                        success: function (data) {
+                            // If the deletion was successful, reload the page
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            // If there was an error, show an error message
+                            Swal.fire('Error', 'An error occurred while deleting the car', 'error');
+                        }
+                    });
+                }
+            })
+        }
     </script>
 }

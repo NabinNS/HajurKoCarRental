@@ -1,11 +1,10 @@
 ﻿using HajurKoCarRental.Models;
-using HajurKoCarRental.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HajurKoCarRental.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -16,6 +15,7 @@ namespace HajurKoCarRental.Data
         public DbSet<Offer> Offers { get; set; }
         public DbSet<RentalRequest> RentalRequests { get; set; }
         public DbSet<RentalHistory> RentalHistories { get; set; }
+        public DbSet<ApplicationUser>ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

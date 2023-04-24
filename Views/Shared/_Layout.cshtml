@@ -12,6 +12,7 @@
     <link href="~/css/StyleSheet.css" rel="stylesheet" />
     @*CDN datatable*@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    
 
 </head>
 <body>
@@ -79,7 +80,13 @@
             </li>
             </ul>
             </div>
+       
     <section class="home-section">
+        <nav class="bg-white grid-item pb-2 mb-2">
+     
+                     <partial name="_LoginPartial" />
+                
+                </nav>
         @RenderBody()
         </section>
 
@@ -92,6 +99,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @*Sweet alert cdn*@
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
         let sidebar = document.querySelector(".sidebar");
