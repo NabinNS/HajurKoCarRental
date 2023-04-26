@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Car>
+﻿ @model IEnumerable<ApplicationUser>
 @{
-    ViewData["Title"] = "Car Page";
+    ViewData["Title"] = "User Control";
 }
 
 <div class="container p-3 test">
@@ -9,51 +9,51 @@
             <h2 class="text-primary">Cars List</h2>
         </div>
         <div class="col-6 text-end">
-            <a asp-controller="Car" asp-action="Create" class="btn btn-primary">Add New Car</a>
+            <a id="register" asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary">Add New User</a>
         </div>
     </div>
 </div>
-<hr class="mt-3"/>
+<hr class="mt-3" />
 <table class="table table-striped" id="cartable">
     <thead>
         <tr>
-            <th>Manufacturer</th>
-            <th>Model</th>
-            <th>Color</th>
-            <th>RentalRate</th>
-            <th>Vehicle No</th>
-            <th>Status</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Regular</th>
+            <th>Active</th>
+            <th>User Name</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var car in Model)
+        @foreach (var user in Model)
         {
             <tr>
                 <td>
-                    @car.Manufacturer
+                    @user.Name
                 </td>
                 <td>
-                    @car.Model
+                    @user.Email
                 </td>
                 <td>
-                    @car.Color
+                    @user.PhoneNumber
                 </td>
                 <td>
-                    @car.RentalRate
+                    @user.IsRegular
                 </td>
                 <td>
-                    @car.VehicleNo
+                    @user.IsActive
                 </td>
                 <td>
-                    @car.IsAvailable
+                    @user.UserName
                 </td>
                 <td>
-                    <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.CarID" class="anchor-size text-success"><i class="fas fa-edit"></i></a>
-                    <a onclick="deleteCar('@car.CarID')" class="anchor-size text-danger"><i class="fa fa-trash"></i></a>
+                    <a asp-controller="User" asp-action="EditUserDetail" asp-route-id="@user.Id" class="anchor-size text-success"><i class="fas fa-edit"></i></a>
+                    <a onclick="deleteUser('@user.Id')" class="anchor-size text-danger"><i class="fa fa-trash"></i></a>
 
-                    <a asp-controller="Car" asp-action="ViewCar" asp-route-id="@car.CarID" class="anchor-size text-primary"><i class="fa-solid fa-eye"></i></a>
-                  
+                    @*<a asp-controller="User" asp-action="ViewUser" asp-route-id="@user.Id" class="anchor-size text-primary"><i class="fa-solid fa-eye"></i></a>*@
+
                 </td>
             </tr>
         }
@@ -69,7 +69,7 @@
         });
     </script>
     <script>
-        function deleteCar(carId) {
+        function deleteUser(userId) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -83,7 +83,7 @@
                     // Make an AJAX call to delete the car from the server
                     $.ajax({
                         type: "POST",
-                        url: "/Car/Delete/" + carId,
+                        url: "/user/Delete/" + userId,
                         success: function (data) {
                             // If the deletion was successful, reload the page
                             location.reload();

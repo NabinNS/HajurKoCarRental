@@ -18,3 +18,14 @@
 .sidebar-anchor{
     text-decoration: none;
 }
+.hide {
+    display: none;
+}
+.setting-heading {
+    border-bottom: 3px solid #004f83;
+    text-align: center;
+}
+
+.setting-pointer {
+    cursor: pointer;
+}

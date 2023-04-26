@@ -16,6 +16,5 @@ namespace HajurKoCarRental.Models
         public ICollection<RentalRequest> RentalRequests { get; set; }
         public ICollection<RentalHistory> RentalHistories { get; set; }
         public ICollection<Damage> Damages { get; set; }
-
     }
 }
