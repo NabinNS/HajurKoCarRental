@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HajurKoCarRental.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230426040821_Alltable")]
-    partial class Alltable
+    [Migration("20230426184805_RemoveAuthorizedByUserIdColumn")]
+    partial class RemoveAuthorizedByUserIdColumn
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -116,8 +116,14 @@ namespace HajurKoCarRental.Migrations
                     b.Property<decimal>("DiscountRate")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("OfferDescription")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("OfferID");
 

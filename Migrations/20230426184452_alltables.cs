@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HajurKoCarRental.Migrations
 {
-    public partial class Alltable : Migration
+    public partial class alltables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -188,7 +188,9 @@ namespace HajurKoCarRental.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CarID = table.Column<int>(type: "int", nullable: false),
                     DiscountRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OfferDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OfferDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {

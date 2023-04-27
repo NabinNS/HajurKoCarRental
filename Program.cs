@@ -1,4 +1,5 @@
 using HajurKoCarRental.Data;
+using HajurKoCarRental.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;

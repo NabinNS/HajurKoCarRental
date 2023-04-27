@@ -34,7 +34,7 @@ namespace HajurKoCarRental.Controllers
                 RequestDate = DateTime.Now,
                 ReturnDate = DateTime.Now,
                 Status = "Pending",
-                AuthorizedBy = userId,
+                AuthorizedBy = userId
 
             };
 

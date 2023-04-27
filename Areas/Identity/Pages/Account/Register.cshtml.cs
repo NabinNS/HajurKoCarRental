@@ -150,6 +150,7 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
                 user.PhoneNumber = Input.PhoneNumber;
                 user.CitizenshipURL = Input.CitizenshipURL;
                 user.DrivingLicenseURL = Input.DrivingLicenseURL;
+                user.IsActive = true;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
