@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HajurKoCarRental.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230426184452_alltables")]
-    partial class alltables
+    [Migration("20230427144558_updaterentalrequest")]
+    partial class updaterentalrequest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -132,35 +132,6 @@ namespace HajurKoCarRental.Migrations
                     b.ToTable("Offers");
                 });
 
-            modelBuilder.Entity("HajurKoCarRental.Models.RentalHistory", b =>
-                {
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("CarID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AuthorizedByID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("RentalDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RentalID")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserID", "CarID");
-
-                    b.HasIndex("AuthorizedByID");
-
-                    b.HasIndex("CarID");
-
-                    b.HasIndex("RentalID");
-
-                    b.ToTable("RentalHistories");
-                });
-
             modelBuilder.Entity("HajurKoCarRental.Models.RentalRequest", b =>
                 {
                     b.Property<int>("ReqID")
@@ -172,17 +143,11 @@ namespace HajurKoCarRental.Migrations
                     b.Property<string>("AuthorizedBy")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AuthorizedByUserId")
+                    b.Property<int?>("CarID")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("CarID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RequestDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
@@ -190,15 +155,15 @@ namespace HajurKoCarRental.Migrations
 
                     b.Property<string>("UserID")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ReqID");
 
                     b.HasIndex("AuthorizedBy");
 
-                    b.HasIndex("AuthorizedByUserId");
-
                     b.HasIndex("CarID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("RentalRequests");
                 });
@@ -471,58 +436,23 @@ namespace HajurKoCarRental.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("HajurKoCarRental.Models.RentalHistory", b =>
-                {
-                    b.HasOne("HajurKoCarRental.Models.ApplicationUser", "AuthorizedBy")
-                        .WithMany()
-                        .HasForeignKey("AuthorizedByID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HajurKoCarRental.Models.Car", "Car")
-                        .WithMany("RentalHistories")
-                        .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HajurKoCarRental.Models.RentalRequest", "RentalRequest")
-                        .WithMany("RentalHistories")
-                        .HasForeignKey("RentalID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HajurKoCarRental.Models.ApplicationUser", "User")
-                        .WithMany("RentalHistories")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AuthorizedBy");
-
-                    b.Navigation("Car");
-
-                    b.Navigation("RentalRequest");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("HajurKoCarRental.Models.RentalRequest", b =>
                 {
-                    b.HasOne("HajurKoCarRental.Models.ApplicationUser", "User")
+                    b.HasOne("HajurKoCarRental.Models.ApplicationUser", "AuthorizedByUser")
                         .WithMany()
                         .HasForeignKey("AuthorizedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("HajurKoCarRental.Models.ApplicationUser", "AuthorizedByUser")
-                        .WithMany("RentalRequests")
-                        .HasForeignKey("AuthorizedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HajurKoCarRental.Models.Car", "Car")
                         .WithMany("RentalRequests")
                         .HasForeignKey("CarID")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HajurKoCarRental.Models.ApplicationUser", "User")
+                        .WithMany("RentalRequests")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AuthorizedByUser");
@@ -589,23 +519,17 @@ namespace HajurKoCarRental.Migrations
 
                     b.Navigation("Offers");
 
-                    b.Navigation("RentalHistories");
-
                     b.Navigation("RentalRequests");
                 });
 
             modelBuilder.Entity("HajurKoCarRental.Models.RentalRequest", b =>
                 {
                     b.Navigation("Damages");
-
-                    b.Navigation("RentalHistories");
                 });
 
             modelBuilder.Entity("HajurKoCarRental.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Damages");
-
-                    b.Navigation("RentalHistories");
 
                     b.Navigation("RentalRequests");
                 });

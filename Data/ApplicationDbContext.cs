@@ -15,8 +15,7 @@ namespace HajurKoCarRental.Data
         public DbSet<Damage> Damages { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<RentalRequest> RentalRequests { get; set; }
-        public DbSet<RentalHistory> RentalHistories { get; set; }
-        public DbSet<ApplicationUser>ApplicationUsers { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,11 +30,13 @@ namespace HajurKoCarRental.Data
                 .HasForeignKey(r => r.UserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // 1-to-1 relationship between RentalRequest and ApplicationUser for AuthorizedBy
             modelBuilder.Entity<RentalRequest>()
-                .HasOne(r => r.User)
+                .HasOne(r => r.AuthorizedByUser)
                 .WithMany()
                 .HasForeignKey(r => r.AuthorizedBy)
                 .OnDelete(DeleteBehavior.Restrict);
+
             // 1-to-many relationship between Car and Offer
             modelBuilder.Entity<Offer>()
                 .HasOne(o => o.Car)
@@ -57,29 +58,6 @@ namespace HajurKoCarRental.Data
                 .HasForeignKey(d => d.CarID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // many-to-many relationship between AppUser and Car (through RentalHistory)
-            modelBuilder.Entity<RentalHistory>()
-                .HasKey(rh => new { rh.UserID, rh.CarID });
-
-            modelBuilder.Entity<RentalHistory>()
-                .HasOne(rh => rh.User)
-                .WithMany(u => u.RentalHistories)
-                .HasForeignKey(rh => rh.UserID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<RentalHistory>()
-                .HasOne(rh => rh.Car)
-                .WithMany(c => c.RentalHistories)
-                .HasForeignKey(rh => rh.CarID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // 1-to-many relationship between AppUser and RentalHistory (as AuthorizedBy)
-            modelBuilder.Entity<RentalHistory>()
-                .HasOne(rh => rh.AuthorizedBy)
-                .WithMany()
-                .HasForeignKey(rh => rh.AuthorizedByID)
-                .OnDelete(DeleteBehavior.Restrict);
-
             // 1-to-many relationship between AppUser and Damage
             modelBuilder.Entity<Damage>()
                 .HasOne(d => d.User)
@@ -87,26 +65,13 @@ namespace HajurKoCarRental.Data
                 .HasForeignKey(d => d.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 1-to-many relationship between RentalRequest and RentalHistory
-            modelBuilder.Entity<RentalHistory>()
-                .HasOne(rh => rh.RentalRequest)
-                .WithMany()
-                .HasForeignKey(rh => rh.RentalID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<RentalRequest>()
-                .HasMany(rr => rr.RentalHistories)
-                .WithOne(rh => rh.RentalRequest)
-                .HasForeignKey(rh => rh.RentalID)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<Damage>()
                 .HasOne(d => d.RentalRequest)
                 .WithMany(r => r.Damages)
                 .HasForeignKey(d => d.RentalID)
                 .OnDelete(DeleteBehavior.Restrict);
-
         }
+
 
     }
 }

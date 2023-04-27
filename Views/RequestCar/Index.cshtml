@@ -19,7 +19,8 @@
                     <p class="card-text">@car.VehicleNo</p>
                 </div>
                 <div class="card-footer">
-                    <a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@car.CarID" class="btn btn-primary">Request</a>
+                 <a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@car.CarID" class="btn btn-primary">Request</a>
+                    @*<a asp-controller="RequestCar" asp-action="AddRequest" class="btn btn-primary">Request</a>*@
                   
                 </div>
             </div>

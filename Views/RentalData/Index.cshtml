@@ -1,0 +1,68 @@
+﻿@model List<RentalRequest>
+
+@{
+    ViewData["Title"] = "Car Request";
+}
+
+<h1>Rental Requests</h1>
+
+@if (User.IsInRole("Customer"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Request Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rentalRequest in Model)
+            {
+                <tr>
+                    <td>@rentalRequest.Car.Manufacturer </td>
+                    <td>@rentalRequest.Car.Model</td>
+                    <td>@rentalRequest.RequestDate</td>
+                    <td>@rentalRequest.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>User Name</th>
+                <th>User Type</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rentalRequest in Model)
+            {
+                <tr>
+                    <td>@rentalRequest.Car.Manufacturer</td>
+                    <td>@rentalRequest.Car.Model</td>
+                    <td>@rentalRequest.User.Name</td>
+                    <td>@(rentalRequest.User.IsRegular ? "Yes" : "No")</td>
+                    <td>@rentalRequest.RequestDate</td>
+                    <td>@rentalRequest.Status</td>
+                    <td>
+                        <a asp-controller="RequestCar" asp-action="RequestHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Approved" class="btn btn-success">Approve</a>
+                        <a asp-controller="RequestCar" asp-action="RequestHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Rejected" class="btn btn-danger">Reject</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@*<a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@rentalRequest.ReqID" class="btn btn-success">Approve</a>
+<a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@rentalRequest.ReqID" class="btn btn-danger">Reject</a>*@

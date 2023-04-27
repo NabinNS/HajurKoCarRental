@@ -209,13 +209,12 @@ namespace HajurKoCarRental.Migrations
                 {
                     ReqID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CarID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AuthorizedBy = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    AuthorizedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    AuthorizedBy = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -227,11 +226,11 @@ namespace HajurKoCarRental.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RentalRequests_AspNetUsers_AuthorizedByUserId",
-                        column: x => x.AuthorizedByUserId,
+                        name: "FK_RentalRequests_AspNetUsers_UserID",
+                        column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RentalRequests_Cars_CarID",
                         column: x => x.CarID,
@@ -272,45 +271,6 @@ namespace HajurKoCarRental.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Damages_RentalRequests_RentalID",
-                        column: x => x.RentalID,
-                        principalTable: "RentalRequests",
-                        principalColumn: "ReqID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RentalHistories",
-                columns: table => new
-                {
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CarID = table.Column<int>(type: "int", nullable: false),
-                    RentalID = table.Column<int>(type: "int", nullable: false),
-                    RentalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AuthorizedByID = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RentalHistories", x => new { x.UserID, x.CarID });
-                    table.ForeignKey(
-                        name: "FK_RentalHistories_AspNetUsers_AuthorizedByID",
-                        column: x => x.AuthorizedByID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RentalHistories_AspNetUsers_UserID",
-                        column: x => x.UserID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RentalHistories_Cars_CarID",
-                        column: x => x.CarID,
-                        principalTable: "Cars",
-                        principalColumn: "CarID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RentalHistories_RentalRequests_RentalID",
                         column: x => x.RentalID,
                         principalTable: "RentalRequests",
                         principalColumn: "ReqID",
@@ -377,34 +337,19 @@ namespace HajurKoCarRental.Migrations
                 column: "CarID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RentalHistories_AuthorizedByID",
-                table: "RentalHistories",
-                column: "AuthorizedByID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RentalHistories_CarID",
-                table: "RentalHistories",
-                column: "CarID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RentalHistories_RentalID",
-                table: "RentalHistories",
-                column: "RentalID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RentalRequests_AuthorizedBy",
                 table: "RentalRequests",
                 column: "AuthorizedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RentalRequests_AuthorizedByUserId",
-                table: "RentalRequests",
-                column: "AuthorizedByUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RentalRequests_CarID",
                 table: "RentalRequests",
                 column: "CarID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentalRequests_UserID",
+                table: "RentalRequests",
+                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -429,9 +374,6 @@ namespace HajurKoCarRental.Migrations
 
             migrationBuilder.DropTable(
                 name: "Offers");
-
-            migrationBuilder.DropTable(
-                name: "RentalHistories");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
