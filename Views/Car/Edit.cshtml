@@ -47,6 +47,11 @@
                         </div>
                         <span asp-validation-for="IsAvailable" class="text-danger"></span>
                     </div>
+                    <div class="mb-3">
+                        <label>Car Image:</label>
+                        <input asp-for="CarImageUrl" class="form-control" />
+                        <span asp-validation-for="CarImageUrl" class="text-danger"></span>
+                    </div>
 
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary me-2">Update</button>

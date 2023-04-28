@@ -4,6 +4,7 @@ using HajurKoCarRental.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HajurKoCarRental.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230428100719_changeddamageandrentalrequest")]
+    partial class changeddamageandrentalrequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,9 +70,6 @@ namespace HajurKoCarRental.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DamageDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DamageType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RentalID")
@@ -145,14 +144,8 @@ namespace HajurKoCarRental.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserID")
                         .IsRequired()

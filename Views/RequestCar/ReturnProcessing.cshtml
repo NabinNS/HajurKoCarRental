@@ -1,0 +1,120 @@
+﻿@model RentalRequest
+
+@{
+    ViewData["Title"] = "Return Process";
+}
+<form method="post" asp-action="AddBill">
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="container">
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h4 class="fw-bold mb-0 text-center">Rental Return Process for @Model.User.Name</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="hidden" value="@Model.ReqID"  name="RequestID"/>
+                               <div style="height: 410px; overflow: hidden;">
+                                  <img class="card-img-top" style="height: 400px; object-fit: cover;" src="@Model.Car.CarImageUrl">
+                                </div>
+
+                             <div class="d-flex justify-content-between">
+                                <div>
+                                   <div class="mb-3">
+                                    <label>Vechicle No:</label>
+                                    <span>@Model.Car.VehicleNo</span>
+                                   </div>
+                                   <div class="mb-3">
+                                    <label>Model:</label>
+                                    <span>@Model.Car.Model</span>
+                                   </div>
+                                </div>
+                                <div>
+                                    @if (Model.Damages != null && Model.Damages.Count > 0)
+                                    {
+                                        <div class="mb-3">
+                                            <label>Damage Type:</label>
+                                            <span>@Model.Damages.FirstOrDefault().DamageType</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Damage Description:</label>
+                                            <span>@Model.Damages.FirstOrDefault().DamageDescription</span>
+                                        </div>
+                                    }
+                                </div>
+                              </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Billing Information</h6>
+                            <div class="row">
+                               <div class="col">
+                                <label>RequestDate:</label>
+                                <input id="RequestDate" asp-for="@Model.RequestDate" class="form-control" readonly />
+                               </div>
+                               <div class="col">
+                                 <label>Return Date:</label>
+                                <input id="ReturnDate" asp-for="@Model.ReturnDate" class="form-control" readonly />
+                               </div>
+                             </div>
+                            <div class="mb-3">
+                                <label>Vehicle Charge:</label>
+                                <input id="VehicleCharge" type="number" class="form-control" value="@Model.Car.RentalRate" readonly />
+                            </div>
+                            <div class="mb-3">
+                                <label>Total Rented Days:</label>
+                                <input id="TotalRentedDays" type="number" class="form-control" readonly />
+                            </div>
+                            <div class="mb-3">
+                                <label>Discount Percent:</label>
+                                <input id="Discount" type="number" class="form-control" value="@(Model.User.IsRegular ? 10 : 0)" readonly />
+                            </div>
+                            <div class="mb-3">
+                                <label>Damage Repair Charge:</label>
+                                <input id="DamageRepairCharge" type="number" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label>Total:</label>
+                                <input id="Total" type="number" class="form-control" name="Total" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary me-2">Add Bill</button>
+                        <a asp-controller="Car" asp-action="Index" class="btn btn-secondary">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function calculateTotal() {
+                var returnDate = $('#ReturnDate').val();
+                var requestDate = $('#RequestDate').val();
+                var rentedDays = Math.floor((new Date(returnDate) - new Date(requestDate)) / (1000 * 60 * 60 * 24));
+                var vehicleCharge = parseFloat($('#VehicleCharge').val());
+                var damageRepairCharge = parseFloat($('#DamageRepairCharge').val()) || 0;
+                var discountPercentage = parseFloat($('#Discount').val()) || 0;
+                var discountAmount = (discountPercentage / 100) * (rentedDays * vehicleCharge);
+                var total = (rentedDays * vehicleCharge) + damageRepairCharge - discountAmount;
+                $('#TotalRentedDays').val(rentedDays);
+                $('#Total').val(total);
+            }
+
+            calculateTotal();
+
+            $('#DamageRepairCharge').keyup(function () {
+                calculateTotal();
+            });
+        });
+
+
+    </script>
+
+}

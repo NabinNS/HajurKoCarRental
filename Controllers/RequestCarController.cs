@@ -140,6 +140,7 @@ namespace HajurKoCarRental.Controllers
             }
             //current user logged in id
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            rentalRequest.Car.IsAvailable = true; // update car status aftering canceling request
             // Update the rental request status
             rentalRequest.Status = status;
             _db.RentalRequests.Update(rentalRequest);
@@ -156,7 +157,7 @@ namespace HajurKoCarRental.Controllers
         }
 
 
-        //Request handler for Admin and staff to approve or reject request
+        //Request handler for Admin and staff to  reject request
         public async Task<IActionResult> RequestCancelHandler(int id, string status)
         {
             // Find the rental request by ID
@@ -195,12 +196,15 @@ namespace HajurKoCarRental.Controllers
 
             string damage = Request.Form["Damage"];
             string damageDescription = Request.Form["DamageDescription"];
+            string damageType = Request.Form["DamageType"];
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             // Update the rental request status
             rentalRequest.Status = "Return Pending";
             rentalRequest.AuthorizedBy = userId;
-
+            rentalRequest.ReturnDate = DateTime.Now;
+            rentalRequest.damage = damage;
+            rentalRequest.Car.IsAvailable = true;
             if (damage == "true")
             {
                 // Create a new instance of Damage
@@ -209,13 +213,14 @@ namespace HajurKoCarRental.Controllers
                     UserID = userId,
                     CarID = rentalRequest.Car.CarID,
                     RentalID = rentalRequest.ReqID,
-                    DamageDescription = damageDescription
+                    DamageDescription = damageDescription,
+                    DamageType = damageType
+                    
                 };
 
                 // Add the damage record to the context and save changes
                 _db.Damages.Add(damageRecord);
                 await _db.SaveChangesAsync();
-                rentalRequest.damage = damage;
             }
 
             // Update the rental request and redirect to RentalData Index
@@ -224,6 +229,39 @@ namespace HajurKoCarRental.Controllers
 
             return RedirectToAction("Index", "RentalData");
         }
+
+        //Return further processing page when admin clicks on return 
+        public async Task<IActionResult> ReturnProcessing(int id)
+        {
+           var rentaldata = await _db.RentalRequests
+                .Include(r => r.User)
+                .Include(r => r.Car)
+                .Include(r => r.Damages) 
+                .FirstOrDefaultAsync(r => r.ReqID == id);
+
+            if (rentaldata == null)
+            {
+                return NotFound();
+            }
+
+            return View(rentaldata);
+        }
+        public async Task<IActionResult> AddBill()
+        {
+            var rentalId = Request.Form["RequestID"];
+            var total = Request.Form["Total"];
+
+            var rentalRequest = await _db.RentalRequests.FindAsync(int.Parse(rentalId));
+            rentalRequest.TotalAmount = decimal.Parse(total);
+            rentalRequest.Paid = false;
+            rentalRequest.Status = "Returned";
+            await _db.SaveChangesAsync();
+
+
+            return RedirectToAction("Index", "RentalData");
+        }
+
+
 
 
     }
