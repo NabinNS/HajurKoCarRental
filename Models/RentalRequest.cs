@@ -13,6 +13,9 @@ namespace HajurKoCarRental.Models
         [ForeignKey("CarID")] public int? CarID { get; set; }
         public DateTime RequestDate { get; set; }
         public string? Status { get; set; }
+        public bool? Paid { get; set; }
+        public DateTime? PaymentDate { get; set; }
+        public string? damage { get; set; }
         [ForeignKey("Id")] public string? AuthorizedBy { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual Car Car { get; set; }

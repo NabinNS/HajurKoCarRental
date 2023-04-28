@@ -22,29 +22,6 @@ namespace HajurKoCarRental.Controllers
 
         }
         [Authorize]
-        //public async Task<IActionResult> Index()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    var userType = await _userManager.GetRolesAsync(user);
-        //    List<RentalRequest> rentalRequests = new List<RentalRequest>();
-
-        //    if(userType.Contains("Admin") || userType.Contains("Staff"))
-        //    {
-        //        rentalRequests = await _db.RentalRequests
-        //           .Include(r => r.User)
-        //           .Include(r => r.Car)
-        //           .ToListAsync();
-        //    }
-        //    else if (userType.Contains("Customer"))
-        //    {
-        //        rentalRequests = await _db.RentalRequests
-        //          .Include(r => r.User)
-        //          .Include(r => r.Car)
-        //          .Where(r => r.User.Id == user.Id)
-        //          .ToListAsync();
-        //    }
-        //    return View(rentalRequests);
-        //}
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -62,19 +39,16 @@ namespace HajurKoCarRental.Controllers
 
             if (userType.Contains("Customer"))
             {
-                rentalRequestsQuery = rentalRequestsQuery.Where(r => r.User.Id == user.Id);
+                rentalRequestsQuery = rentalRequestsQuery.Where(r => r.User.Id == user.Id && (r.Status == "Approved" || r.Status == "Pending"));
             }
             else if (userType.Contains("Admin") || userType.Contains("Staff"))
             {
-                rentalRequestsQuery = rentalRequestsQuery.Where(r => r.Status == "Pending");
+                rentalRequestsQuery = rentalRequestsQuery.Where(r => r.Status == "Pending" || r.Status == "Canceled Pending" || r.Status == "Return Pending");
             }
 
             var rentalRequests = await rentalRequestsQuery.ToListAsync();
 
             return View(rentalRequests);
         }
-
-
-
     }
 }

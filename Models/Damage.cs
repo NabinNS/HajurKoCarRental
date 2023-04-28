@@ -10,10 +10,6 @@ namespace HajurKoCarRental.Models
         [ForeignKey("CarID")] public int CarID { get; set; }
         [ForeignKey("RentalId")] public int RentalID { get; set; }
         public string? DamageDescription { get; set; }
-        public string? DamageStatus { get; set; }
-        public decimal TotalCost { get; set; }
-        public DateTime DamageRequestDate { get; set; }
-        public DateTime PaidDate { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual Car Car { get; set; }
         public virtual RentalRequest RentalRequest { get; set; }

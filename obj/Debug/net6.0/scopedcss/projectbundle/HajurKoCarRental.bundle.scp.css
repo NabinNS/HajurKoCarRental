@@ -2,380 +2,50 @@
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-/*a.navbar-brand {
+a.navbar-brand[b-kmjzuyetvi] {
   white-space: normal;
   text-align: center;
   word-break: break-all;
 }
 
-a {
+a[b-kmjzuyetvi] {
   color: #0077cc;
 }
 
-.btn-primary {
+.btn-primary[b-kmjzuyetvi] {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+.nav-pills .nav-link.active[b-kmjzuyetvi], .nav-pills .show > .nav-link[b-kmjzuyetvi] {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
-.border-top {
+.border-top[b-kmjzuyetvi] {
   border-top: 1px solid #e5e5e5;
 }
-.border-bottom {
+.border-bottom[b-kmjzuyetvi] {
   border-bottom: 1px solid #e5e5e5;
 }
 
-.box-shadow {
+.box-shadow[b-kmjzuyetvi] {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
-button.accept-policy {
+button.accept-policy[b-kmjzuyetvi] {
   font-size: 1rem;
   line-height: inherit;
 }
 
-.footer {
+.footer[b-kmjzuyetvi] {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
-}
-*/
-/*@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");*/
-
-*[b-kmjzuyetvi] {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", Arial;
-}
-
-body[b-kmjzuyetvi] {
-    overflow: hidden;
-}
-.sidebar .nav-links .sidebar-anchor[b-kmjzuyetvi] {
-    text-decoration: none !important;
-}
-
-.sidebar[b-kmjzuyetvi] {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 260px;
-    background: #004f83;
-    z-index: 100;
-    transition: all 0.5s ease;
-}
-
-    .sidebar.close[b-kmjzuyetvi] {
-        width: 78px;
-    }
-
-    .sidebar .logo-details[b-kmjzuyetvi] {
-        height: 50px;
-        width: 100%;
-        display: flex;
-        align-items: center;
-    }
-
-        .sidebar .logo-details i[b-kmjzuyetvi] {
-            font-size: 30px;
-            color: #fff;
-            height: 50px;
-            min-width: 78px;
-            text-align: center;
-            line-height: 50px;
-        }
-
-        .sidebar .logo-details .logo_name[b-kmjzuyetvi] {
-            font-size: 20px;
-            color: #fff;
-            font-weight: 600;
-            transition: 0.3s ease;
-            transition-delay: 0.1s;
-        }
-
-    .sidebar.close .logo-details .logo_name[b-kmjzuyetvi] {
-        transition-delay: 0s;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .sidebar .nav-links[b-kmjzuyetvi] {
-        height: 100%;
-        padding: 30px 0 150px 0;
-        overflow: auto;
-    }
-
-    .sidebar.close .nav-links[b-kmjzuyetvi] {
-        overflow: visible;
-    }
-
-    .sidebar .nav-links[b-kmjzuyetvi]::-webkit-scrollbar {
-        display: none;
-    }
-
-    .sidebar .nav-links li[b-kmjzuyetvi] {
-        position: relative;
-        list-style: none;
-        transition: all 0.4s ease;
-    }
-
-        .sidebar .nav-links li:hover[b-kmjzuyetvi] {
-            background: #0067ac;
-        }
-
-        .sidebar .nav-links li .icon-link[b-kmjzuyetvi] {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-    .sidebar.close .nav-links li .icon-link[b-kmjzuyetvi] {
-        display: block;
-    }
-
-    .sidebar .nav-links li i[b-kmjzuyetvi] {
-        height: 50px;
-        min-width: 78px;
-        text-align: center;
-        line-height: 50px;
-        color: #fff;
-        font-size: 22px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .sidebar .nav-links li.showMenu i.arrow[b-kmjzuyetvi] {
-        transform: rotate(-180deg);
-    }
-
-    .sidebar.close .nav-links i.arrow[b-kmjzuyetvi] {
-        display: none;
-    }
-
-    .sidebar .nav-links li a[b-kmjzuyetvi] {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-    }
-
-        .sidebar .nav-links li a .link_name[b-kmjzuyetvi] {
-            font-size: 15px;
-            font-weight: 400;
-            color: #fff;
-            transition: all 0.4s ease;
-        }
-
-    .sidebar.close .nav-links li a .link_name[b-kmjzuyetvi] {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .sidebar .nav-links li .sub-menu[b-kmjzuyetvi] {
-        padding: 6px 6px 14px 80px;
-        margin-top: -10px;
-        background: #0067ac;
-        display: none;
-    }
-
-    .sidebar .nav-links li.showMenu .sub-menu[b-kmjzuyetvi] {
-        display: block;
-    }
-
-    .sidebar .nav-links li .sub-menu a[b-kmjzuyetvi] {
-        color: #fff;
-        font-size: 15px;
-        padding: 5px 0;
-        white-space: nowrap;
-        opacity: 0.6;
-        transition: all 0.3s ease;
-    }
-
-        .sidebar .nav-links li .sub-menu a:hover[b-kmjzuyetvi] {
-            opacity: 1;
-        }
-
-    .sidebar.close .nav-links li .sub-menu[b-kmjzuyetvi] {
-        position: absolute;
-        left: 100%;
-        top: -10px;
-        margin-top: 0;
-        padding: 10px 20px;
-        border-radius: 0 6px 6px 0;
-        opacity: 0;
-        display: block;
-        pointer-events: none;
-        transition: 0s;
-    }
-
-    .sidebar.close .nav-links li:hover .sub-menu[b-kmjzuyetvi] {
-        top: 0;
-        opacity: 1;
-        pointer-events: auto;
-        transition: all 0.4s ease;
-    }
-
-    .sidebar .nav-links li .sub-menu .link_name[b-kmjzuyetvi] {
-        display: none;
-    }
-
-    .sidebar.close .nav-links li .sub-menu .link_name[b-kmjzuyetvi] {
-        font-size: 18px;
-        opacity: 1;
-        display: block;
-    }
-
-    .sidebar .nav-links li .sub-menu.blank[b-kmjzuyetvi] {
-        opacity: 1;
-        pointer-events: auto;
-        padding: 3px 20px 6px 16px;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .sidebar .nav-links li:hover .sub-menu.blank[b-kmjzuyetvi] {
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .sidebar .profile-details[b-kmjzuyetvi] {
-        position: fixed;
-        bottom: 0;
-        width: 260px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: #0067ac;
-        padding: 12px 0;
-        transition: all 0.5s ease;
-    }
-
-    .sidebar.close .profile-details[b-kmjzuyetvi] {
-        background: none;
-    }
-
-    .sidebar.close .profile-details[b-kmjzuyetvi] {
-        width: 78px;
-    }
-
-    .sidebar .profile-details .profile-content[b-kmjzuyetvi] {
-        display: flex;
-        align-items: center;
-    }
-
-    .sidebar .profile-details img[b-kmjzuyetvi] {
-        height: 52px;
-        width: 52px;
-        object-fit: cover;
-        border-radius: 16px;
-        margin: 0 14px 0 12px;
-        background: #1d1b31;
-        transition: all 0.5s ease;
-    }
-
-    .sidebar.close .profile-details img[b-kmjzuyetvi] {
-        padding: 10px;
-    }
-
-    .sidebar .profile-details .profile_name[b-kmjzuyetvi],
-    .sidebar .profile-details .job[b-kmjzuyetvi] {
-        color: #fff;
-        font-size: 18px;
-        font-weight: 500;
-        white-space: nowrap;
-    }
-
-    .sidebar.close .profile-details i[b-kmjzuyetvi],
-    .sidebar.close .profile-details .profile_name[b-kmjzuyetvi],
-    .sidebar.close .profile-details .job[b-kmjzuyetvi] {
-        display: none;
-    }
-
-    .sidebar .profile-details .job[b-kmjzuyetvi] {
-        font-size: 12px;
-    }
-
-.home-section[b-kmjzuyetvi] {
-    position: relative;
-    background: #e4e9f7;
-    height: 100vh;
-    left: 260px;
-    width: calc(100% - 260px);
-    transition: all 0.5s ease;
-    padding: 0px 9px;
-    overflow: auto;
-}
-
-    .home-section[b-kmjzuyetvi]::-webkit-scrollbar {
-        display: none;
-    }
-
-.sidebar.close ~ .home-section[b-kmjzuyetvi] {
-    left: 78px;
-    width: calc(100% - 78px);
-}
-
-.home-content[b-kmjzuyetvi] {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.home-section .home-content .bx-menu[b-kmjzuyetvi],
-.home-section .home-content .text[b-kmjzuyetvi] {
-    color: #11101d;
-    font-size: 35px;
-}
-
-.home-section .home-content .bx-menu[b-kmjzuyetvi] {
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-.home-section .home-content .text[b-kmjzuyetvi] {
-    font-size: 26px;
-    font-weight: 600;
-}
-
-@media screen and (max-width: 400px) {
-    .sidebar[b-kmjzuyetvi] {
-        width: 240px;
-    }
-
-        .sidebar.close[b-kmjzuyetvi] {
-            width: 78px;
-        }
-
-        .sidebar .profile-details[b-kmjzuyetvi] {
-            width: 240px;
-        }
-
-        .sidebar.close .profile-details[b-kmjzuyetvi] {
-            background: none;
-        }
-
-        .sidebar.close .profile-details[b-kmjzuyetvi] {
-            width: 78px;
-        }
-
-    .home-section[b-kmjzuyetvi] {
-        left: 240px;
-        width: calc(100% - 240px);
-    }
-
-    .sidebar.close ~ .home-section[b-kmjzuyetvi] {
-        left: 78px;
-        width: calc(100% - 78px);
-    }
 }
 /* _content/HajurKoCarRental/Views/Shared/_UnregisteredLayout.cshtml.rz.scp.css */
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification

@@ -4,17 +4,20 @@
     ViewData["Title"] = "Car Request";
 }
 
-<h1>Rental Requests</h1>
+<h1>Rental Requests Action</h1>
 
 @if (User.IsInRole("Customer"))
 {
-    <table class="table">
+    <table class="table" id="customerRequest">
         <thead>
             <tr>
                 <th>Brand</th>
                 <th>Model</th>
+                <th>Vehicle No</th>
                 <th>Request Date</th>
                 <th>Status</th>
+                <th>Action</th>
+
             </tr>
         </thead>
         <tbody>
@@ -23,8 +26,17 @@
                 <tr>
                     <td>@rentalRequest.Car.Manufacturer </td>
                     <td>@rentalRequest.Car.Model</td>
+                    <td>@rentalRequest.Car.VehicleNo</td>
                     <td>@rentalRequest.RequestDate</td>
                     <td>@rentalRequest.Status</td>
+                    <td>
+                        <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                        data-bs-target="#CustomerReturnModal" onclick="setCustomerReturnId('@rentalRequest.ReqID')">
+                           Return
+                        </button>
+                        @*<a asp-controller="RequestCar" asp-action="CustomerRequestHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Return Pending" class="btn btn-success">Return</a>*@
+                        <a asp-controller="RequestCar" asp-action="CustomerRequestHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Canceled Pending" class="btn btn-danger">Cancel</a>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -32,27 +44,34 @@
 }
 else if (User.IsInRole("Admin") || User.IsInRole("Staff"))
 {
-    <table class="table">
+    <div class="d-flex justify-content-center">
+        <h5 class="me-4 mb-5 setting-heading setting-pointer" data-target="table-pending">Pending Requests</h5>
+        <h5 class="mb-5 setting-pointer" data-target="table-canceled">Canceled or Return Requests</h5>
+    </div>
+    <table class="table" id="table-pending">
         <thead>
             <tr>
                 <th>Brand</th>
                 <th>Model</th>
+                <th>Vehicle No</th>
                 <th>User Name</th>
-                <th>User Type</th>
+                <th>Regular</th>
                 <th>Request Date</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var rentalRequest in Model)
+            @foreach (var rentalRequest in Model.Where(r => r.Status == "Pending"))
             {
                 <tr>
                     <td>@rentalRequest.Car.Manufacturer</td>
                     <td>@rentalRequest.Car.Model</td>
+                    <td>@rentalRequest.Car.VehicleNo</td>
                     <td>@rentalRequest.User.Name</td>
+                    
                     <td>@(rentalRequest.User.IsRegular ? "Yes" : "No")</td>
-                    <td>@rentalRequest.RequestDate</td>
+                    <td>@rentalRequest.RequestDate.ToShortDateString()</td>
                     <td>@rentalRequest.Status</td>
                     <td>
                         <a asp-controller="RequestCar" asp-action="RequestHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Approved" class="btn btn-success">Approve</a>
@@ -62,7 +81,132 @@ else if (User.IsInRole("Admin") || User.IsInRole("Staff"))
             }
         </tbody>
     </table>
+
+
+    //table to show for canceled or return pending
+    <table class="table hide" id="table-canceled">
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Vehicle No</th>
+                <th>User Name</th>
+                <th>Regular</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rentalRequest in Model.Where(r => r.Status == "Canceled Pending" || r.Status == "Return Pending"))
+            {
+                <tr>
+                    <td>@rentalRequest.Car.Manufacturer</td>
+                    <td>@rentalRequest.Car.Model</td>
+                    <td>@rentalRequest.Car.VehicleNo</td>
+                    <td>@rentalRequest.User.Name</td>
+                    <td>@(rentalRequest.User.IsRegular ? "Yes" : "No")</td>
+                    <td>@rentalRequest.RequestDate.ToShortDateString()</td>
+                    <td>@rentalRequest.Status</td>
+                    <td>
+                        @if (rentalRequest.Status == "Canceled Pending")
+                        {
+                            <a asp-controller="RequestCar" asp-action="RequestCancelHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Canceled" class="btn btn-danger">Cancel</a>
+                        }
+                        else if (rentalRequest.Status == "Return Pending")
+                        {
+                            <a asp-controller="RequestCar" asp-action="ReturnHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Returned" class="btn btn-danger">Return</a>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
 }
 
+<!-- Return Modal for Customer detailing about return -->
+
+<div class="modal fade" id="CustomerReturnModal" tabindex="-1" aria-labelledby="AddOfferModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center font" id="AddOfferModalLabel">Return slip</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <form method="post" action="@Url.Action("ReturnCustomerHandler", "RequestCar")">
+                <div class="modal-body">
+                    <input type="hidden" name="rentalId" id="IdforRental">
+                    <div class="form-group">
+                        <label class="form-label" for="Damage">Was there any damage?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Damage" id="DamageYes" value="true" checked>
+                            <label class="form-check-label" for="DamageYes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Damage" id="DamageNo" value="false">
+                            <label class="form-check-label" for="DamageNo">No</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="DamageDescription">If yes, please describe:</label>
+                        <input class="form-control" type="text" id="DamageDescription" name="DamageDescription" placeholder="Damage Description">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("[data-target]").click(function () {
+                var targetId = $(this).data("target");
+                if (targetId === "table-pending") {
+                    $("#table-pending").show();
+                    $('#table-pending').DataTable({
+                        "ordering": false
+                    });
+                    $("#table-canceled").hide();
+                    $('#table-canceled').DataTable().destroy();
+                } else if (targetId === "table-canceled") {
+                    $("#table-pending").hide();
+                    $("#table-canceled").show();
+                    $('#table-canceled').DataTable({
+                        "ordering": false
+                    });
+                    $('#table-pending').DataTable().destroy();
+                }
+                $("[data-target]").removeClass("setting-heading");
+                $(this).addClass("setting-heading");
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#customerRequest').DataTable();
+            $('#table-pending').DataTable(
+                {
+                    sorting: false
+                });
+           
+       
+        });
+    </script>
+    <script>
+        function setCustomerReturnId(rentalId) {
+            document.getElementById('IdforRental').value = rentalId;
+
+        }
+    </script>
+}
 @*<a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@rentalRequest.ReqID" class="btn btn-success">Approve</a>
 <a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@rentalRequest.ReqID" class="btn btn-danger">Reject</a>*@

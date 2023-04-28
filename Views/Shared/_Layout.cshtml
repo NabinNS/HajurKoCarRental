@@ -16,7 +16,7 @@
 
 </head>
 <body>
-@*    <header>
+    <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HajurKoCarRental</a>
@@ -30,97 +30,39 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="Index">Cars</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="RequestCar" asp-action="Index">Request Car</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">User Control</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Offer" asp-action="Index">Offer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="RentalData" asp-action="Index">Rental Data</a>
                         </li>
                     </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
 
     <div class="container">
-    <main role="main" class="pb-3">
-    @RenderBody()
-    </main>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-    <div class="container">
-    &copy; 2023 - HajurKoCarRental - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-    </footer>*@
-    <div class="sidebar">
-        <div class="logo-details">
-            <i class='bx bxs-car-garage'></i>
-            <span class="logo_name">Car Rental</span>
-            <span><i class="bx bx-menu"></i></span>
+    <footer class="border-top footer text-muted text-center">
+        <div class="container">
+            &copy; 2023 - HajurKoCarRental - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-        <ul class="nav-links">
-            <li>
-                <a href="/dashboard" class="sidebar-anchor">
-                    <i class="bx bx-grid-alt"></i>
-                    <span class="link_name">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a class="sidebar-anchor" asp-area="" asp-controller="Car" asp-action="Index">
-                    <div>
-                        <i class='bx bx-car'></i>
-                    <span class="link_name">Cars</span>
-                    </div>
-                </a>
-            </li>
-             <li>
-                <a class="sidebar-anchor" asp-area="" asp-controller="RequestCar" asp-action="Index">
-                    <div>
-                        <i class='bx bx-user'></i>
-                    <span class="link_name">Request Car</span>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a class="sidebar-anchor" asp-area="" asp-controller="User" asp-action="Index">
-                    <div>
-                        <i class='bx bx-user'></i>
-                        <span class="link_name">User Control</span>
-                    </div>
-                </a>
-            </li>
-            <li>
+    </footer>
 
-                <a class="sidebar-anchor" asp-controller="Offer" asp-action="Index">
-                    <i class='bx bx-line-chart'></i>
-                    <span class="link_name">Offer</span>
-                </a>
-
-            </li>
-            <li>
-
-                <a class="sidebar-anchor" asp-controller="RentalData" asp-action="Index">
-                    <i class='bx bx-line-chart'></i>
-                    <span class="link_name">Rental Data</span>
-                </a>
-
-            </li>
-            <li>
-
-                <a class="sidebar-anchor" asp-controller="Home" asp-action="Privacy">
-                        <i class='bx bx-line-chart'></i>
-                        <span class="link_name">Privacy</span>
-                </a>
-
-            </li>
-            </ul>
-            </div>
-       
-    <section class="home-section">
-        <nav class="bg-white grid-item pb-2 mb-2">
-     
-                     <partial name="_LoginPartial" />
-                
-                </nav>
-        @RenderBody()
-        </section>
 
 
 
@@ -131,6 +73,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     @*Sweet alert cdn*@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
