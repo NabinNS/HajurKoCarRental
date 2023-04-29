@@ -51,15 +51,36 @@ namespace HajurKoCarRental.Controllers
             return View(rentalRequests);
         }
         [Authorize]
-        public async Task<IActionResult> RentalHistory()
+        public async Task<IActionResult> RentalHistory(DateTime? startDate, DateTime? endDate)
         {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userType = await _userManager.GetRolesAsync(user);
+
             IQueryable<RentalRequest> rentalRequestsQuery = _db.RentalRequests
                 .Include(r => r.User)
                 .Include(r => r.Car);
+            if (startDate != null && endDate != null)
+            {
+                //filter according to date match of request date
+                rentalRequestsQuery = rentalRequestsQuery.Where(r => r.RequestDate >= startDate && r.RequestDate <= endDate);
+            }
 
-            List<RentalRequest> rentalRequests = await rentalRequestsQuery.ToListAsync();
+            if (userType.Contains("Customer"))
+            {
+                rentalRequestsQuery = rentalRequestsQuery.Where(r => r.User.Id == user.Id);
+            }
+
+            var rentalRequests = await rentalRequestsQuery.ToListAsync();
 
             return View(rentalRequests);
+
+    
         }
 
     }

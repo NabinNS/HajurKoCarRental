@@ -1,7 +1,12 @@
-﻿using HajurKoCarRental.Data;
+﻿using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
+using HajurKoCarRental.Data;
 using HajurKoCarRental.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
+using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
 
 namespace HajurKoCarRental.Controllers
 {
@@ -63,13 +68,46 @@ namespace HajurKoCarRental.Controllers
         //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Car obj)
+        public async Task<IActionResult> Create(Car obj, IFormFile file)
         {
-                _db.Cars.Add(obj);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            
+            var account = new Account(
+                "NabinNs",
+                "428542427551857",
+                "A1gFD-djrOGlzEhYe-ysX_A2JUo");
+            var cloudinary = new Cloudinary(account);
+
+            var uploadResult = new ImageUploadResult();
+            if (file != null && file.Length > 0)
+            {
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(file.FileName, file.OpenReadStream())
+                };
+
+               uploadResult = await cloudinary.UploadAsync(uploadParams);
+
+            }
+
+            var car = new Car
+            {
+                Manufacturer = obj.Manufacturer,
+                Model = obj.Model,
+                RentalRate = obj.RentalRate,
+                VehicleNo = obj.VehicleNo,
+                IsAvailable = obj.IsAvailable,
+                Color = obj.Color,
+                CarImageUrl = uploadResult.SecureUrl?.ToString()
+            };
+            _db.Cars.Add(car);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
+
+        //_db.Cars.Add(obj);
+        //_db.SaveChanges();
+        //return RedirectToAction("Index");
+
+
         public IActionResult Edit(int? id)
         {
             if(id == null || id == 0)

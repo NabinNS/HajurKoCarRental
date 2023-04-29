@@ -1,6 +1,6 @@
 ﻿@model Car
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="d-flex justify-content-center align-items-center h-100">
         <div class="container">
             <div class="card shadow-lg">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="mb-3">
                         <label asp-for="CarImageUrl" class="form-label">Car Image URL:</label>
-                        <input asp-for="CarImageUrl" class="form-control" />
+                             <input type="file" class="form-control" id="file" name="file">
                         <span asp-validation-for="CarImageUrl" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
