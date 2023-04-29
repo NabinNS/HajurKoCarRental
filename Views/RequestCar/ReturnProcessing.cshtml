@@ -29,7 +29,7 @@
                                     <span>@Model.Car.Model</span>
                                    </div>
                                 </div>
-                                <div>
+                                <div class="text-danger">
                                     @if (Model.Damages != null && Model.Damages.Count > 0)
                                     {
                                         <div class="mb-3">
@@ -80,7 +80,7 @@
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary me-2">Add Bill</button>
-                        <a asp-controller="Car" asp-action="Index" class="btn btn-secondary">Back</a>
+                        <a asp-controller="RentalData" asp-action="Index" class="btn btn-secondary">Back</a>
                     </div>
                 </div>
             </div>

@@ -187,6 +187,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[G:/dotnet/HajurKoCarRental/Views/Car/TableCarView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyXFRhYmxlQ2FyVmlldy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [G:/dotnet/HajurKoCarRental/Views/Car/ViewCar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyXFZpZXdDYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -213,6 +217,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [G:/dotnet/HajurKoCarRental/Views/RentalData/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsRGF0YVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[G:/dotnet/HajurKoCarRental/Views/RentalData/RentalHistory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsRGF0YVxSZW50YWxIaXN0b3J5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [G:/dotnet/HajurKoCarRental/Views/RequestCar/AddRequestCar.cshtml]

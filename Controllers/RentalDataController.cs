@@ -50,5 +50,17 @@ namespace HajurKoCarRental.Controllers
 
             return View(rentalRequests);
         }
+        [Authorize]
+        public async Task<IActionResult> RentalHistory()
+        {
+            IQueryable<RentalRequest> rentalRequestsQuery = _db.RentalRequests
+                .Include(r => r.User)
+                .Include(r => r.Car);
+
+            List<RentalRequest> rentalRequests = await rentalRequestsQuery.ToListAsync();
+
+            return View(rentalRequests);
+        }
+
     }
 }

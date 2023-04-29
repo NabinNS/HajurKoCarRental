@@ -82,7 +82,8 @@ namespace HajurKoCarRental.Controllers
             </html>";
                 await _emailSender.SendEmailAsync(customer.Email, subject, message);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Car");
+
         }
         public IActionResult Delete(int? id)
         {

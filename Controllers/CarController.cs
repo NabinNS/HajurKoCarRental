@@ -1,6 +1,7 @@
 ﻿using HajurKoCarRental.Data;
 using HajurKoCarRental.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HajurKoCarRental.Controllers
 {
@@ -12,7 +13,45 @@ namespace HajurKoCarRental.Controllers
         {
             _db = db;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string filter)
+        {
+            IEnumerable<Car> objCarList;
+
+            switch (filter)
+            {
+                case "all":
+                    objCarList = await _db.Cars.ToListAsync();
+                    break;
+                case "available":
+                    objCarList = await _db.Cars
+                    .Include(c => c.Offers)
+                    .Where(c => c.IsAvailable)
+                    .ToListAsync();
+                    break;
+                case "rent":
+                    objCarList = await _db.Cars.Where(c => !c.IsAvailable).ToListAsync();
+                    break;
+                case "frequent":
+                    objCarList = await _db.RentalRequests
+                        .GroupBy(r => r.CarID)
+                        .Where(g => g.Count() > 3)
+                        .Select(g => g.FirstOrDefault().Car)
+                        .ToListAsync();
+                    break;
+                case "notrented":
+                    objCarList = await _db.Cars
+                        .Where(c => !c.RentalRequests.Any())
+                        .ToListAsync();
+                    break;
+                default:
+                    objCarList = await _db.Cars.Where(c => c.IsAvailable).ToListAsync();
+                    break;
+            }
+
+            return View(objCarList);
+        }
+
+        public IActionResult TableCarView()
         {
             IEnumerable<Car> objCarList = _db.Cars;
             return View(objCarList);
@@ -94,6 +133,7 @@ namespace HajurKoCarRental.Controllers
 
             return View(carFromDb);
         }
+
 
     }
 }

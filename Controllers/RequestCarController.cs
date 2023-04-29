@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Net.Mail;
+using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 
 namespace HajurKoCarRental.Controllers
@@ -59,10 +60,10 @@ namespace HajurKoCarRental.Controllers
             // Add the rental request to the database
             _db.RentalRequests.Add(requestForRent);
             _db.SaveChanges();
-         
-         
 
-            return RedirectToAction("Index");
+
+
+            return RedirectToAction("Index", "Car");
 
         }
         //Request handler for Admin and staff to approve or reject request
@@ -80,6 +81,10 @@ namespace HajurKoCarRental.Controllers
             // Update the rental request status
             rentalRequest.Status = status;
             rentalRequest.AuthorizedBy = userId;
+            if (status == "Rejected")
+            {
+                rentalRequest.Car.IsAvailable = true;
+            }
             _db.RentalRequests.Update(rentalRequest);
             await _db.SaveChangesAsync();
 
@@ -167,7 +172,6 @@ namespace HajurKoCarRental.Controllers
             {
                 return BadRequest("Invalid Rental Request ID");  // Return an error message to the user
             }
-            rentalRequest.Car.IsAvailable = true;
             //current user logged in id
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             // Update the rental request status

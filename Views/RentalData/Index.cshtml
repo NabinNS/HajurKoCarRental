@@ -3,8 +3,18 @@
 @{
     ViewData["Title"] = "Car Request";
 }
+<style>
+    .dataTables_wrapper{
+        margin: 0px 10px 10px 10px;
+    }
+</style>
 
-<h1>Rental Requests Action</h1>
+<div class="d-flex justify-content-center align-items-center h-100">
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h4 class="fw-bold mb-0 text-center">Rental Requests Action</h4>
+            </div>
 
 @if (User.IsInRole("Customer"))
 {
@@ -45,12 +55,15 @@
         </tbody>
     </table>
 }
+
 else if (User.IsInRole("Admin") || User.IsInRole("Staff"))
 {
-    <div class="d-flex justify-content-center">
+            
+    <div class="d-flex justify-content-center mt-3">
         <h5 class="me-4 mb-5 setting-heading setting-pointer" data-target="table-pending">Pending Requests</h5>
         <h5 class="mb-5 setting-pointer" data-target="table-canceled">Return Requests</h5>
     </div>
+
     <table class="table" id="table-pending">
         <thead>
             <tr>
@@ -64,7 +77,7 @@ else if (User.IsInRole("Admin") || User.IsInRole("Staff"))
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody class="text-warning">
+        <tbody class="text-success">
             @foreach (var rentalRequest in Model.Where(r => r.Status == "Pending"))
             {
                 <tr>
@@ -127,6 +140,9 @@ else if (User.IsInRole("Admin") || User.IsInRole("Staff"))
         </tbody>
     </table>
 }
+        </div>
+    </div>
+</div>
 
 <!-- Return Modal for Customer detailing about return -->
 
