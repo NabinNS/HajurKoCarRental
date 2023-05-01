@@ -15,6 +15,9 @@ builder.Services.AddDbContext <ApplicationDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddDefaultUI()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.AddScoped<HajurKoCarRental.Areas.Identity.Pages.Account.RegisterModel>();
+
 var app = builder.Build();
 
 

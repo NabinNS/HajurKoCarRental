@@ -25,16 +25,40 @@ namespace HajurKoCarRental.Controllers
             _emailSender = emailSender;
 
         }
-        public IActionResult Index()
+
+
+        public async Task<IActionResult> Index()
         {
+   
+
             IEnumerable<Car> CarList = _db.Cars.Where(c => c.IsAvailable == true);
             return View(CarList);
 
         }
 
         [Authorize]
-        public IActionResult AddRequestCar(int id)
+        public async Task<IActionResult> AddRequestCar(int id, decimal? dis)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId) as ApplicationUser;
+
+            if (user != null)
+            {
+                var forpaymentrentaldata = await _db.RentalRequests.Where(r => r.UserID == user.Id).ToListAsync();
+                bool anyNotPaid = forpaymentrentaldata.Any(r => r.Paid == false);
+                user.PaymentDue = anyNotPaid;
+                await _db.SaveChangesAsync();
+            }
+            if (user.Verified != true)
+            {
+                return BadRequest("Citizenship and license is required.");
+            }
+            if (user.PaymentDue == true)
+            {
+                return BadRequest("Payment needs to be cleared before requesting renting.");
+            }
+
+
             // Check if the carId is valid
             var car = _db.Cars.FirstOrDefault(c => c.CarID == id);
             if (car == null)
@@ -46,8 +70,8 @@ namespace HajurKoCarRental.Controllers
             //so that other cannot request same car again
             car.IsAvailable = false;
             _db.Cars.Update(car);
-     
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
             // Create a new rental request with the given car ID and user ID
             var requestForRent = new RentalRequest
             {
@@ -55,17 +79,20 @@ namespace HajurKoCarRental.Controllers
                 UserID = userId,
                 RequestDate = DateTime.Now,
                 Status = "Pending",
+                OfferDis = dis
             };
 
             // Add the rental request to the database
             _db.RentalRequests.Add(requestForRent);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
 
 
             return RedirectToAction("Index", "Car");
 
         }
+
+
         //Request handler for Admin and staff to approve or reject request
         public async Task<IActionResult> RequestHandler(int id, string status)
         {
@@ -148,6 +175,7 @@ namespace HajurKoCarRental.Controllers
             rentalRequest.Car.IsAvailable = true; // update car status aftering canceling request
             // Update the rental request status
             rentalRequest.Status = status;
+            rentalRequest.ReturnDate = DateTime.Now;
             _db.RentalRequests.Update(rentalRequest);
             await _db.SaveChangesAsync();
 
@@ -205,7 +233,6 @@ namespace HajurKoCarRental.Controllers
 
             // Update the rental request status
             rentalRequest.Status = "Return Pending";
-            rentalRequest.AuthorizedBy = userId;
             rentalRequest.ReturnDate = DateTime.Now;
             rentalRequest.damage = damage;
             rentalRequest.Car.IsAvailable = true;
@@ -264,6 +291,27 @@ namespace HajurKoCarRental.Controllers
 
             return RedirectToAction("Index", "RentalData");
         }
+        public async Task<IActionResult> PayDue(int id)
+        {
+            var rentalRequest = await _db.RentalRequests.FirstOrDefaultAsync(r => r.ReqID == id);
+         
+            if (rentalRequest == null)
+            {
+                return BadRequest("Invalid rental request ID.");
+            }
+
+       
+
+            // Update the rental request to mark it as paid
+            rentalRequest.Paid = true;
+            rentalRequest.PaymentDate = DateTime.Now;
+
+            _db.RentalRequests.Update(rentalRequest);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("CustomerBill", "RentalData");
+        }
+
 
 
 

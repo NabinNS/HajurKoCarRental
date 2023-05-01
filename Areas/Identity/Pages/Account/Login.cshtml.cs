@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using HajurKoCarRental.Data;
+using Microsoft.EntityFrameworkCore;
+using HajurKoCarRental.Models;
 
 namespace HajurKoCarRental.Areas.Identity.Pages.Account
 {
@@ -22,12 +25,14 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _db;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
+        public LoginModel(ApplicationDbContext db, SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
             _userManager = userManager;
+            _db = db;
         }
 
         [BindProperty]
@@ -96,6 +101,10 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    await CheckUserStatus(user.Id); // call the function
+                    await CheckAndUpdateOffers(_db);
+                    await CheckUserActive(_userManager);
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -116,5 +125,66 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
 
             return Page();
         }
+        //Added by self NS to check user regular and set last active time
+            public async Task CheckUserStatus(string userId)
+            {
+                var rentals = await _db.RentalRequests
+                    .Where(r => r.UserID == userId && r.RequestDate.Month == DateTime.Now.Month)
+                    .ToListAsync();
+            var user = await _userManager.FindByIdAsync(userId) as ApplicationUser;
+            user.LastActive = DateTime.Now;
+            //var forpaymentrentaldata = await _db.RentalRequests.Where(r => r.UserID == userId).ToListAsync();
+            //bool anyNotPaid = forpaymentrentaldata.Any(r => r.Paid == false);
+            //user.PaymentDue = anyNotPaid;
+
+            if (rentals.Count >= 3)
+                {
+   
+                    user.IsRegular = true;
+
+                }
+            await _userManager.UpdateAsync(user);
+        }
+
+
+        public static async Task CheckAndUpdateOffers(ApplicationDbContext db)
+        {
+            try
+            {
+                var now = DateTime.Now;
+                var offersToUpdate = await db.Offers
+                    .Where(o => o.Status == true && o.EndDate < now)
+                    .ToListAsync();
+
+                foreach (var offer in offersToUpdate)
+                {
+                    offer.Status = false;
+                }
+
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while checking and updating offers: {ex.Message}");
+            }
+        }
+
+
+        public static async Task CheckUserActive(UserManager<IdentityUser> userManager)
+        {
+            var users = await userManager.Users.OfType<ApplicationUser>().ToListAsync();
+
+            foreach (var user in users)
+            {
+                if (user.LastActive.HasValue && (DateTime.Now - user.LastActive.Value).TotalDays >= 90)
+                {
+                    user.IsActive = false;
+               
+                }
+                await userManager.UpdateAsync(user);
+            }
+        }
+
+
     }
 }

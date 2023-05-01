@@ -7,25 +7,34 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Principal;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
+using Microsoft.AspNetCore.Identity;
 
 namespace HajurKoCarRental.Controllers
 {
     public class CarController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CarController(ApplicationDbContext db)
+
+        public CarController(ApplicationDbContext db, UserManager<IdentityUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
         public async Task<IActionResult> Index(string filter)
         {
             IEnumerable<Car> objCarList;
+            if (!User.Identity.IsAuthenticated)
+            {
+                filter = "all";
+            }
+
 
             switch (filter)
             {
                 case "all":
-                    objCarList = await _db.Cars.ToListAsync();
+                    objCarList = await _db.Cars.Include(c => c.Offers).ToListAsync();
                     break;
                 case "available":
                     objCarList = await _db.Cars
@@ -34,7 +43,7 @@ namespace HajurKoCarRental.Controllers
                     .ToListAsync();
                     break;
                 case "rent":
-                    objCarList = await _db.Cars.Where(c => !c.IsAvailable).ToListAsync();
+                    objCarList = await _db.Cars.Where(c => !c.IsAvailable).Include(c => c.Offers).ToListAsync();
                     break;
                 case "frequent":
                     objCarList = await _db.RentalRequests
@@ -49,7 +58,10 @@ namespace HajurKoCarRental.Controllers
                         .ToListAsync();
                     break;
                 default:
-                    objCarList = await _db.Cars.Where(c => c.IsAvailable).ToListAsync();
+                    objCarList = await _db.Cars
+                     .Include(c => c.Offers)
+                     .Where(c => c.IsAvailable)
+                     .ToListAsync();
                     break;
             }
 

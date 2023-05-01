@@ -5,7 +5,7 @@
 }
 <style>
     .dataTables_wrapper{
-        margin: 0px 10px 10px 10px;
+        margin: 10px 10px 10px 10px;
     }
 </style>
 
@@ -46,7 +46,6 @@
                         data-bs-target="#CustomerReturnModal" onclick="setCustomerReturnId('@rentalRequest.ReqID')">
                                 Return
                             </button>
-                            @*<a asp-controller="RequestCar" asp-action="CustomerRequestHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Return Pending" class="btn btn-success">Return</a>*@
                         }
                         <a asp-controller="RequestCar" asp-action="CustomerRequestHandler" asp-route-id="@rentalRequest.ReqID" asp-route-status="Canceled Pending" class="btn btn-danger">Cancel</a>
                     </td>

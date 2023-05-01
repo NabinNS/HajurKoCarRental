@@ -18,6 +18,7 @@ namespace HajurKoCarRental.Models
         public DateTime? PaymentDate { get; set; }
         public decimal? TotalAmount { get; set; }
         public string? damage { get; set; }
+        public decimal? OfferDis { get; set; }
    
         [ForeignKey("Id")] public string? AuthorizedBy { get; set; }
         public virtual ApplicationUser User { get; set; }

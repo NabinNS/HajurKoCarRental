@@ -136,6 +136,9 @@ namespace HajurKoCarRental.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<decimal?>("OfferDis")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool?>("Paid")
                         .HasColumnType("bit");
 
@@ -395,9 +398,18 @@ namespace HajurKoCarRental.Migrations
                     b.Property<bool>("IsRegular")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("LastActive")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("PaymentDue")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Verified")
+                        .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });

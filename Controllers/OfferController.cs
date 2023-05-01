@@ -1,5 +1,6 @@
 ﻿using HajurKoCarRental.Data;
 using HajurKoCarRental.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,14 @@ namespace HajurKoCarRental.Controllers
             _userManager = userManager;
             _emailSender = emailSender;
         }
+        [Authorize(Roles = "Admin,Staff")]
         public IActionResult Index()
         {
             var offerlist = _db.Offers.Include(o => o.Car).ToList();
             //IEnumerable<Offer> offerlist = _db.Offers;
             return View(offerlist);
         }
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<ActionResult> CreateOffer()
         {
             //var cars = await _db.Cars.Select(c => new { ID = c.CarID, Name = c.Model + "-" + c.Color }).ToListAsync();
@@ -44,12 +47,17 @@ namespace HajurKoCarRental.Controllers
             string endDate = Request.Form["EndDate"];
             string offerDescription = Request.Form["OfferDescription"];
 
-            // create a new instance of the Offer class and populate its properties
-            //if (!int.TryParse(carId, out int carIdInt) || !decimal.TryParse(discountRate, out decimal discountRateDecimal))
-            //{
-            //    // handle the error here
-            //    return BadRequest();
-            //}
+            // Check if there is an existing offer for the car with status true
+            var existingOffer = await _db.Offers.FirstOrDefaultAsync(o => o.CarID == int.Parse(carId) && o.Status == true);
+
+            // If there is an existing offer, update its status to false
+            if (existingOffer != null)
+            {
+                existingOffer.Status = false;
+                _db.Entry(existingOffer).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+            }
+
             Offer offer = new Offer()
             {
                 CarID = int.Parse(carId),
@@ -85,6 +93,7 @@ namespace HajurKoCarRental.Controllers
             return RedirectToAction("Index", "Car");
 
         }
+        [Authorize(Roles = "Admin,Staff")]
         public IActionResult Delete(int? id)
         {
             var obj = _db.Offers.Find(id);
@@ -100,6 +109,7 @@ namespace HajurKoCarRental.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin,Staff")]
         public IActionResult CloseOffer(int? id)
         {
             var offerData = _db.Offers.Find(id);

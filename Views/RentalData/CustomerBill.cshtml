@@ -1,0 +1,86 @@
+﻿@model List<RentalRequest>
+
+    @*to display pending bills of customers
+        on can be viewed by customer --> customer page
+    *@
+@{
+    ViewData["Title"] = "Customer Bill";
+}
+<style>
+    .dataTables_wrapper{
+        margin: 10px 10px 10px 10px;
+    }
+</style>
+
+
+<div class="d-flex justify-content-center align-items-center h-100">
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h4 class="fw-bold mb-0 text-center">Bills List</h4>
+            </div>
+
+       
+
+    <table class="table" id="table-bill">
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Vehicle No</th>
+                <th>Request Date</th>
+                <th>Return Date</th>
+                <th>Authorized By</th>
+                <th>Damaged</th>
+                <th>Damaged Type</th>
+               <th>Total Amount</th>
+               <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rentalRequest in Model)
+            {
+                 <tr class="@(rentalRequest.Paid == true ? "text-success" : "text-danger")">
+                    <td>@rentalRequest.Car.Model</td>
+                    <td>@rentalRequest.Car.VehicleNo</td>
+                    <td>@rentalRequest.RequestDate.ToShortDateString()</td>
+                    <td>@(rentalRequest.ReturnDate?.ToShortDateString() ?? "N/A")</td>
+                    <td>@(rentalRequest.AuthorizedByUser != null ? rentalRequest.AuthorizedByUser.Name : "N/A")</td>
+                    <td>@(String.Equals(rentalRequest.damage, "true", StringComparison.OrdinalIgnoreCase) ? "Yes" : "No")</td>
+                     <td>@(rentalRequest.Damages.FirstOrDefault()?.DamageType ?? "No Damage")</td>
+                     <td>@rentalRequest.TotalAmount</td>
+                   
+                     <td>
+                        @if (rentalRequest.Paid == false)
+                         {
+                        <a asp-controller="RequestCar" asp-action="PayDue" asp-route-id=@rentalRequest.ReqID class="btn btn-success">Pay</a>
+                         }
+                         else{
+                                    <i class="fas fa-check ms-3"></i>
+                         }
+                     </td>
+                          
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $('#table-bill').DataTable();
+       
+        });
+    </script>
+
+}
+@*<a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@rentalRequest.ReqID" class="btn btn-success">Approve</a>
+<a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@rentalRequest.ReqID" class="btn btn-danger">Reject</a>*@

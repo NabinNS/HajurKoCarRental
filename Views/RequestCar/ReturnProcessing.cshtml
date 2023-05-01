@@ -64,9 +64,15 @@
                                 <label>Total Rented Days:</label>
                                 <input id="TotalRentedDays" type="number" class="form-control" readonly />
                             </div>
-                            <div class="mb-3">
+                            <div class="row">
+                                <div class="col">
                                 <label>Discount Percent:</label>
                                 <input id="Discount" type="number" class="form-control" value="@(Model.User.IsRegular ? 10 : 0)" readonly />
+                                </div>
+                                <div class="col">
+                                    <label>Offer Discount:</label>
+                                    <input id="Offer" type="number" class="form-control" value="@(Model.OfferDis)" readonly />
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label>Damage Repair Charge:</label>
@@ -97,12 +103,14 @@
             function calculateTotal() {
                 var returnDate = $('#ReturnDate').val();
                 var requestDate = $('#RequestDate').val();
-                var rentedDays = Math.floor((new Date(returnDate) - new Date(requestDate)) / (1000 * 60 * 60 * 24));
+                var rentedDays = Math.floor((new Date(returnDate) - new Date(requestDate)) / (1000 * 60 * 60 * 24)) || 1;
                 var vehicleCharge = parseFloat($('#VehicleCharge').val());
                 var damageRepairCharge = parseFloat($('#DamageRepairCharge').val()) || 0;
+                var offerDiscount = parseFloat($('#Offer').val()) || 0;
+                var offerAmount = (offerDiscount / 100) * (rentedDays * vehicleCharge);
                 var discountPercentage = parseFloat($('#Discount').val()) || 0;
                 var discountAmount = (discountPercentage / 100) * (rentedDays * vehicleCharge);
-                var total = (rentedDays * vehicleCharge) + damageRepairCharge - discountAmount;
+                var total = (rentedDays * vehicleCharge) + damageRepairCharge - discountAmount - offerAmount;
                 $('#TotalRentedDays').val(rentedDays);
                 $('#Total').val(total);
             }

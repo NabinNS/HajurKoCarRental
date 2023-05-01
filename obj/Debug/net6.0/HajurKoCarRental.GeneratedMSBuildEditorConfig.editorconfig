@@ -195,6 +195,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyXFZpZXdDYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[G:/dotnet/HajurKoCarRental/Views/Damage/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFtYWdlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [G:/dotnet/HajurKoCarRental/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -213,6 +217,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [G:/dotnet/HajurKoCarRental/Views/Offer/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT2ZmZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[G:/dotnet/HajurKoCarRental/Views/RentalData/CustomerBill.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsRGF0YVxDdXN0b21lckJpbGwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [G:/dotnet/HajurKoCarRental/Views/RentalData/Index.cshtml]
@@ -245,6 +253,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [G:/dotnet/HajurKoCarRental/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[G:/dotnet/HajurKoCarRental/Views/User/AddDocument.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxBZGREb2N1bWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [G:/dotnet/HajurKoCarRental/Views/User/EditUserDetail.cshtml]

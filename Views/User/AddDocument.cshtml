@@ -1,0 +1,31 @@
+﻿@model ApplicationUser
+@{
+    ViewData["Title"] = "Add Document";
+}
+<div class="d-flex justify-content-center align-items-center h-100">
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h4 class="fw-bold mb-0 text-center">Add Documents</h4>
+            </div>
+            <form class="m-3" enctype="multipart/form-data" method="post" asp-controller="User" asp-action="AddDocumentToDB">
+                <div class="mb-3">
+                    <label asp-for="CitizenshipURL">Citizenship URL</label>
+                    <input asp-for="CitizenshipURL" type="file" class="form-control" autocomplete="username" aria-required="true" name="Citizenship" id="Citizenship" accept="image/*" />
+                    <span asp-validation-for="CitizenshipURL" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DrivingLicenseURL">Driving license URL</label>
+                    <input asp-for="DrivingLicenseURL" type="file" class="form-control" autocomplete="username" aria-required="true" name="DrivingLicense" id="DrivingLicense" accept="image/*" />
+                    <span asp-validation-for="DrivingLicenseURL" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary d-block mx-auto text-center">Add Document</button>
+            </form>
+
+
+            </div>
+            </div>
+            </div>
+
+
+

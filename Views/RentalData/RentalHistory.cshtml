@@ -67,18 +67,19 @@
                 <th>Authorized By</th>
             </tr>
         </thead>
-        <tbody class="text-success">
+        <tbody>
             @foreach (var rentalRequest in Model)
             {
-                <tr>
+                     <tr class="@(rentalRequest.Status == "Pending" ? "text-warning" : rentalRequest.Status == "Approved" ? "text-success" : "text-danger")">
+
                     <td>@rentalRequest.Car.Manufacturer</td>
                     <td>@rentalRequest.Car.Model</td>
                     <td>@rentalRequest.Car.VehicleNo</td>
                     <td>@rentalRequest.User.Name</td>
                     <td>@rentalRequest.RequestDate.ToShortDateString()</td>
                     <td>@rentalRequest.Status</td>
-                     <td>@(rentalRequest.ReturnDate?.ToShortDateString() ?? "N/A")</td>
-                    <td>@(rentalRequest.AuthorizedByUser != null ? rentalRequest.AuthorizedByUser.Name : "N/A")</td>
+                     <td>@(rentalRequest.ReturnDate?.ToShortDateString() ?? "")</td>
+                    <td>@(rentalRequest.AuthorizedByUser != null ? rentalRequest.AuthorizedByUser.Name : "")</td>
                 </tr>
             }
         </tbody>
@@ -99,10 +100,10 @@
                <th>Total Amount</th>
             </tr>
         </thead>
-        <tbody class="text-success">
+        <tbody>
                     @foreach (var rentalRequest in Model.Where(r => r.Paid != null))
             {
-                <tr>
+                <tr class="@(rentalRequest.Paid == true ? "text-success" : "text-danger")">
 
                     <td>@rentalRequest.Car.Model</td>
                     <td>@rentalRequest.Car.VehicleNo</td>

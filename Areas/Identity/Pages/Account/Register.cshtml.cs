@@ -33,6 +33,10 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        public IWebHostEnvironment WebHostEnvironment { get; }
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -40,7 +44,7 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager
+            RoleManager<IdentityRole> roleManager, IWebHostEnvironment webHostEnvironment
             )
         {
             _roleManager = roleManager;
@@ -50,6 +54,7 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -114,7 +119,6 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
             public IEnumerable<SelectListItem> RoleList { get; set; }
         }
 
-
         public async Task OnGetAsync(string returnUrl = null)
         {
             if(! _roleManager.RoleExistsAsync(SD.Role_User_Admin).GetAwaiter().GetResult())
@@ -135,8 +139,7 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
                 })
             };
         }
-
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(IFormFile DrivingLicense, IFormFile Citizenship, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -149,8 +152,30 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
                 user.Name = Input.Name;
                 user.PhoneNumber = Input.PhoneNumber;
                 user.CitizenshipURL = Input.CitizenshipURL;
-                user.DrivingLicenseURL = Input.DrivingLicenseURL;
+                //user.DrivingLicenseURL = Input.DrivingLicenseURL;
+                user.IsRegular = true;
+                user.PaymentDue = false;
                 user.IsActive = true;
+                if ((Citizenship?.Length ?? 0) > 1572864 || (DrivingLicense?.Length ?? 0) > 1572864)
+                {
+                    ModelState.AddModelError(string.Empty, "The size of the  photo must not be more than 1.5 MB.");
+                    return Page();
+                }
+
+                user.Verified = Citizenship != null || DrivingLicense != null;
+
+                if (Citizenship != null)
+                {
+                    string citizenshipUrl = await SaveDocumentPhoto(Citizenship, Input.Name, "Citizenship");
+             
+                    user.CitizenshipURL = citizenshipUrl;
+                }
+                if (DrivingLicense != null)
+                {
+                    string licenseUrl = await SaveDocumentPhoto(DrivingLicense, Input.Name, "License");
+              
+                    user.DrivingLicenseURL = licenseUrl;
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -221,6 +246,20 @@ namespace HajurKoCarRental.Areas.Identity.Pages.Account
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
             return (IUserEmailStore<IdentityUser>)_userStore;
+        }
+        //method to add citizenship and driving license photo
+        public async Task<string> SaveDocumentPhoto(IFormFile photo, string namePrefix, string documentType)
+        {
+            string folder = "Document-Photo/";
+            string extension = Path.GetExtension(photo.FileName);
+            folder += Guid.NewGuid().ToString() + " " + namePrefix + "-" + documentType + extension;
+
+            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+            // Create the directory if it doesn't exist
+            Directory.CreateDirectory(Path.GetDirectoryName(serverFolder));
+            await photo.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+
+            return folder;
         }
     }
 }

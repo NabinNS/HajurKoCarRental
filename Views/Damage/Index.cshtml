@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Damage>
+@{
+    ViewData["Title"] = "Damage";
+}
+
+<div class="d-flex justify-content-center align-items-center h-100">
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h4 class="fw-bold mb-0 text-center">Rental Requests Action</h4>
+            </div>
+    <table class="table" id="damageTable">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Model</th>
+                <th>Vehicle No</th>
+                <th>Damage Type</th>
+                <th>Damage Description</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var damage in Model)
+            {
+               <tr class="text-danger">
+                   <td>@damage.User.UserName</td>
+                   <td>@damage.Car.Model</td>
+                   <td>@damage.Car.VehicleNo</td>
+                   <td>@damage.DamageType</td>
+                   <td>@damage.DamageDescription</td>
+               </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $('#damageTable').DataTable()
+        });
+    </script>
+}

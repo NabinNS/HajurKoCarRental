@@ -9,7 +9,9 @@
             <h2 class="text-primary">Users List</h2>
         </div>
         <div class="col-6 text-end">
+              @if (User.IsInRole("Admin")){
             <a id="register" asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary">Add New User</a>
+              }
         </div>
     </div>
 </div>

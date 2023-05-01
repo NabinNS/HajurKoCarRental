@@ -89,12 +89,15 @@
                         <p><strong>Vehicle No:</strong> @car.VehicleNo</p>
                         <p><strong>Availability:</strong> @car.IsAvailable</p>
                         <p><strong>Rental Rate:</strong> @car.RentalRate</p>
+                        @{
+                            decimal offerValue = 0;
+                        }
                         @if (car.Offers != null && car.Offers.Any(o => o.Status == true))
                         {
                             var offer = car.Offers.FirstOrDefault(o => o.Status == true);
                             <p class="text-small text-danger m-0 p-0">@offer.OfferDescription </p>
                             <p class="text-small text-danger m-0 p-0"> ( @offer.DiscountRate % off) Till @offer.EndDate</p>
-                       
+                            offerValue = offer.DiscountRate;
                         }
 
 
@@ -113,7 +116,7 @@
                             </button>
                         }
                         @if (car.IsAvailable && User.IsInRole("Customer")) {
-                            <a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@car.CarID" class="btn btn-warning">Rent</a>
+                            <a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@car.CarID" asp-route-dis="@offerValue" class="btn btn-warning">Rent</a>
                         }
                     </div>
                 }
