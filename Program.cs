@@ -3,6 +3,7 @@ using HajurKoCarRental.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -41,6 +42,11 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-DbSeeder.SeedUser(app).Wait();
+using (var serviceScope = app.Services.CreateScope())
+{
+    var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    DbSeeder.SeedUser(app, roleManager).Wait();
+}
+
 DbSeeder.SeedCar(app);
 app.Run();

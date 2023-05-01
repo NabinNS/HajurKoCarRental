@@ -1,6 +1,9 @@
 ﻿using HajurKoCarRental.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -9,11 +12,15 @@ namespace HajurKoCarRental.Data
 {
     public class DbSeeder
     {
-        public static async Task SeedUser(IApplicationBuilder applicationBuilder)
+        public static async Task SeedUser(IApplicationBuilder applicationBuilder, RoleManager<IdentityRole> roleManager)
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+                roleManager.CreateAsync(new IdentityRole(SD.Role_User_Admin)).GetAwaiter().GetResult();
+                roleManager.CreateAsync(new IdentityRole(SD.Role_User_Staff)).GetAwaiter().GetResult();
+                roleManager.CreateAsync(new IdentityRole(SD.Role_User_Cust)).GetAwaiter().GetResult();
 
                 var adminUserEmail = "nabinshrestha348@gmail.com";
                 var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
@@ -33,7 +40,8 @@ namespace HajurKoCarRental.Data
                         PhoneNumber = "9869064300"
                     };
                     await userManager.CreateAsync(newAdminUser, "@Nabin123");
-                    await userManager.AddToRoleAsync(newAdminUser, "Admin");
+                 
+                    await userManager.AddToRoleAsync(newAdminUser, SD.Role_User_Admin);
                 }
 
                 var customerUserEmail = "customer123@gmail.com";
@@ -54,7 +62,7 @@ namespace HajurKoCarRental.Data
                         PhoneNumber = "123456789"
                     };
                     await userManager.CreateAsync(newcustomerUser, "@Nabin123");
-                    await userManager.AddToRoleAsync(newcustomerUser, "Customer");
+                    await userManager.AddToRoleAsync(newcustomerUser, SD.Role_User_Cust);
                 }
             }
         }
