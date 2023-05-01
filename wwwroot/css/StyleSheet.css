@@ -69,4 +69,41 @@
     background-color: #3e8e41;
 }
 
+/*
+slick css*/
+.slick-next, .slick-prev {
+    top: 110% !important;
+    z-index: 999999 !important;
+    left: 85% !important;
+    width: 40px !important;
+    height: 30px !important;
+}
+
+.slick-next {
+    margin-left: 25px;
+}
+
+.slick-dots {
+    padding-left: 50% !important;
+    top: 106% !important;
+}
+
+    .slick-dots li {
+        margin-right: 0px !important;
+    }
+
+        .slick-dots li.slick-active::after {
+            position: absolute !important;
+            content: '.' !important;
+            top: -5px !important;
+            left: 7px;
+            color: red !important;
+            opacity: 1 !important;
+            font-size: 40px !important;
+        }
+
+        .slick-dots li a {
+            color: #fff !important;
+            font-size: 0.8rem !important;
+        }
 

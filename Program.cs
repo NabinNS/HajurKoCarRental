@@ -41,5 +41,6 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+DbSeeder.SeedUser(app).Wait();
+DbSeeder.SeedCar(app);
 app.Run();

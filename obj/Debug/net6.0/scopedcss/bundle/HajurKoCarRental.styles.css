@@ -1,3 +1,90 @@
+/* _content/HajurKoCarRental/Views/Home/Index.cshtml.rz.scp.css */
+.hero[b-z4gg36v6be] {
+    background-image: url( https://wpshopmart.com/html/demo/car-website-template/img/bg.png);
+    height: 100vh;
+    background-size: cover;
+    background-attachment: fixed;
+    position: absolute;
+    width: 100%;
+    left: 0;
+}
+
+.hero .hero-inner .left[b-z4gg36v6be]{
+    margin-top: 15%;
+}
+.hero .hero-inner .left .main-content h1[b-z4gg36v6be]{
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #d43242;
+}
+    .hero .hero-inner .left .main-content h1 span[b-z4gg36v6be]{
+        color: #fff;
+        font-size: 3.7rem;
+    }
+
+.hero .hero-inner .left .main-content p[b-z4gg36v6be]{
+    color: #fff;
+    font-size: 0.9rem;
+    text-align: justify;
+}
+.hero .hero-inner .left button.discover[b-z4gg36v6be]{
+    display: flex;
+    align-items: center;
+    outline: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 20px;
+    padding: 5px 30px 10px 20px;
+    border: 3px solid #ffa938;
+    background-color: #d43242;
+    box-shadow: 5px 7px 20px #000;
+}
+    .hero .hero-inner .left button.discover a[b-z4gg36v6be] {
+        text-decoration: none;
+        color: #fff;
+        font-size: 1.3rem;
+        letter-spacing: 2px;
+        margin-right: 15px;
+        text-transform: capitalize;
+        position: relative;
+        letter-spacing: 1px;
+    }
+
+        .hero .hero-inner .left button.discover a i[b-z4gg36v6be]{
+            position: absolute;
+            top: 8px;
+            right: -30%;
+            transition: 0.2s ease;
+        }
+
+.hero .hero-inner .left button.discover:hover a i[b-z4gg36v6be]{
+    right: -35%;
+}
+
+.hero .hero-inner .left .sec-content[b-z4gg36v6be] {
+    color: #fff;
+}
+
+    .hero .hero-inner .left .sec-content .p1[b-z4gg36v6be] {
+        opacity: 0.75;
+        font-size: 0.8rem;
+    }
+    .hero .hero-inner .left .sec-content .p2[b-z4gg36v6be] {
+        margin-top: -10px;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+.hero .hero-inner .right[b-z4gg36v6be]{
+    margin-top: 16%;
+}
+    .hero .hero-inner .right .carz img[b-z4gg36v6be]{
+        width: 85%;
+        margin: auto;
+        float: right;
+    }
+
+    
 /* _content/HajurKoCarRental/Views/Shared/_Layout.cshtml.rz.scp.css */
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
