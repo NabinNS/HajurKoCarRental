@@ -25,7 +25,7 @@ namespace HajurKoCarRental.Controllers
         public async Task<IActionResult> Index(string filter)
         {
             IEnumerable<Car> objCarList;
-            if (!User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated) //to show all availabe cars when no user is logged in
             {
                 filter = "all";
             }
@@ -68,12 +68,12 @@ namespace HajurKoCarRental.Controllers
             return View(objCarList);
         }
 
-        public IActionResult TableCarView()
+        public IActionResult TableCarView() //to show cars in tabluar view
         {
             IEnumerable<Car> objCarList = _db.Cars;
             return View(objCarList);
         }
-        public IActionResult Create()
+        public IActionResult Create() //return car form view page
         {
             return View();
         }
@@ -86,7 +86,7 @@ namespace HajurKoCarRental.Controllers
                 "NabinNs",
                 "428542427551857",
                 "A1gFD-djrOGlzEhYe-ysX_A2JUo");
-            var cloudinary = new Cloudinary(account);
+            var cloudinary = new Cloudinary(account); //using cloudinary to add image to cloud
 
             var uploadResult = new ImageUploadResult();
             if (file != null && file.Length > 0)
@@ -112,51 +112,60 @@ namespace HajurKoCarRental.Controllers
             };
             _db.Cars.Add(car);
             await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = "New car added successfully";
             return RedirectToAction("Index");
         }
 
-        //_db.Cars.Add(obj);
-        //_db.SaveChanges();
-        //return RedirectToAction("Index");
-
-
         public IActionResult Edit(int? id)
         {
-            if(id == null || id == 0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
             var carFromDb = _db.Cars.Find(id);
             if (carFromDb == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Car not found.";
+                return RedirectToAction("Index"); 
             }
             return View(carFromDb);
         }
+
         //Post
         [HttpPost]
         public IActionResult Edit(Car car)
         {
-
-            var carFromDb = _db.Cars.Find(car.CarID); // Find the existing car object from the database
-            if (carFromDb != null)
+            try
             {
-                carFromDb.Manufacturer = car.Manufacturer; // Update the car properties with the new values
-                carFromDb.Model = car.Model;
-                carFromDb.Color = car.Color;
-                carFromDb.RentalRate = car.RentalRate;
-                carFromDb.VehicleNo = car.VehicleNo;
-                carFromDb.IsAvailable = car.IsAvailable;
-                carFromDb.CarImageUrl = car.CarImageUrl;
+                var carFromDb = _db.Cars.Find(car.CarID); // Find the existing car object from the database
+                if (carFromDb != null)
+                {
+                    carFromDb.Manufacturer = car.Manufacturer; // Update the car properties with the new values
+                    carFromDb.Model = car.Model;
+                    carFromDb.Color = car.Color;
+                    carFromDb.RentalRate = car.RentalRate;
+                    carFromDb.VehicleNo = car.VehicleNo;
+                    carFromDb.IsAvailable = car.IsAvailable;
+                    if (car.CarImageUrl != null)
+                    {
+                    carFromDb.CarImageUrl = car.CarImageUrl;
+                    }
+                    _db.Cars.Update(carFromDb); // Update the car object in the database
+                    _db.SaveChanges();
+                    TempData["SuccessMessage"] = "Car data edited successfully";
 
-                _db.Cars.Update(carFromDb); // Update the car object in the database
-                _db.SaveChanges();
+                    return RedirectToAction("Index"); // Redirect to the index action
+                }
 
-                return RedirectToAction("Index"); // Redirect to the index action
+                return NotFound(); // Car not found
             }
-
-            return NotFound(); // Car
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred while editing the car data: " + ex.Message;
+                return RedirectToAction("Index"); // Redirect to the index action with error message
+            }
         }
+
         public IActionResult Delete(int? id)
         {
             var obj = _db.Cars.Find(id);
@@ -170,6 +179,7 @@ namespace HajurKoCarRental.Controllers
             }
             _db.Cars.Remove(obj);
             _db.SaveChanges();
+            TempData["SuccessMessage"] = "Car deleted successfully";
             return RedirectToAction("Index");
         }
 

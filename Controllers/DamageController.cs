@@ -14,7 +14,7 @@ namespace HajurKoCarRental.Controllers
         {
             _db = db;
         }
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Admin,Staff")] //only these two roles can access this page
         public async Task<IActionResult> Index()
         {
             IEnumerable<Damage> allDamages = await _db.Damages

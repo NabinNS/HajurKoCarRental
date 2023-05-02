@@ -80,6 +80,20 @@
 
     <div class="container">
         <main role="main" class="pb-3">
+            <div id="notification-container">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+            </div>
             @RenderBody()
         </main>
     </div>
@@ -101,7 +115,14 @@
     <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     @*Sweet alert cdn*@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script>
+        $(function () {
+            // Hide the notification after 3 seconds
+            setTimeout(function () {
+                $('#notification-container').fadeOut('slow');
+            }, 3000);
+        });
+        </script>
 
     <script>
         let sidebar = document.querySelector(".sidebar");

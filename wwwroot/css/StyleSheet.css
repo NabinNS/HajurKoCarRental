@@ -68,6 +68,12 @@
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+#notification-container {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 9999;
+}
 
 /*
 slick css*/

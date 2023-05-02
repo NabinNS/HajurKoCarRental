@@ -54,7 +54,8 @@ namespace HajurKoCarRental.Controllers
 
                 if (userFromDb == null)
                 {
-                    return NotFound();
+                TempData["ErrorMessage"] = "No user data found";
+                return RedirectToAction("Index");
                 }
 
                 userFromDb.Name = user.Name;
@@ -62,8 +63,9 @@ namespace HajurKoCarRental.Controllers
                 userFromDb.PhoneNumber = user.PhoneNumber;
 
                 await _db.SaveChangesAsync();
+                TempData["SuccessMessage"] = "User updated successfully";
 
-                return RedirectToAction("Index");
+            return RedirectToAction("Index");
             }
         //Post
         [HttpPost]
@@ -90,7 +92,7 @@ namespace HajurKoCarRental.Controllers
             userFromDb.PasswordHash = hashedPassword;
 
             await _db.SaveChangesAsync();
-
+            TempData["SuccessMessage"] = "User password updated successfully";
             return RedirectToAction("Index");
         }
         public IActionResult Delete(string id)
@@ -103,12 +105,14 @@ namespace HajurKoCarRental.Controllers
 
             _db.ApplicationUsers.Remove(obj);
             _db.SaveChanges();
+            TempData["SuccessMessage"] = "User deleted successfully";
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> AddDocument()
         {
             var currentUser = await _userManager.GetUserAsync(User);
+          
             return View(currentUser);
         }
 
@@ -137,6 +141,7 @@ namespace HajurKoCarRental.Controllers
                 string licenseUrl = await _registerModel.SaveDocumentPhoto(DrivingLicense, user.Name, "License");
                 user.DrivingLicenseURL = licenseUrl;
             }
+            TempData["SuccessMessage"] = "Document added successfully";
             await _userManager.UpdateAsync(user);
 
 

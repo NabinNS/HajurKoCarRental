@@ -51,11 +51,13 @@ namespace HajurKoCarRental.Controllers
             }
             if (user.Verified != true)
             {
-                return BadRequest("Citizenship and license is required.");
+                TempData["ErrorMessage"] = "You must upload your license or citizenship";
+                return RedirectToAction("Index", "Car");
             }
             if (user.PaymentDue == true)
             {
-                return BadRequest("Payment needs to be cleared before requesting renting.");
+                TempData["ErrorMessage"] = "You must clear due payment";
+                return RedirectToAction("Index", "Car");
             }
 
 
@@ -85,9 +87,7 @@ namespace HajurKoCarRental.Controllers
             // Add the rental request to the database
             _db.RentalRequests.Add(requestForRent);
             await _db.SaveChangesAsync();
-
-
-
+            TempData["SuccessMessage"] = "Sent car request for approval";
             return RedirectToAction("Index", "Car");
 
         }
@@ -114,6 +114,7 @@ namespace HajurKoCarRental.Controllers
             }
             _db.RentalRequests.Update(rentalRequest);
             await _db.SaveChangesAsync();
+     
 
             if (status == "Approved" || status == "Canceled" || status == "Rejected" || status == "Returned")
             {
@@ -155,6 +156,7 @@ namespace HajurKoCarRental.Controllers
                     </html>";
                 await _emailSender.SendEmailAsync(user.Email, emailSubject, emailBody);
             }
+            TempData["SuccessMessage"] = "Car Request "+ status + " successfully";
             return RedirectToAction("Index", "RentalData");
         }
 
@@ -186,6 +188,7 @@ namespace HajurKoCarRental.Controllers
             //    var message = "Dear staffs, A new request has been made.";
             //    await _emailSender.SendEmailAsync(staff.Email, subject, message);
             //}
+            TempData["SuccessMessage"] = "Car Request " + status + " successfully";
             return RedirectToAction("Index", "RentalData");
         }
 
@@ -207,7 +210,7 @@ namespace HajurKoCarRental.Controllers
             rentalRequest.AuthorizedBy = userId;
             _db.RentalRequests.Update(rentalRequest);
             await _db.SaveChangesAsync();
-
+            TempData["SuccessMessage"] = "Car Request " + status + " successfully";
             return RedirectToAction("Index", "RentalData");
         }
 
@@ -252,11 +255,13 @@ namespace HajurKoCarRental.Controllers
                 // Add the damage record to the context and save changes
                 _db.Damages.Add(damageRecord);
                 await _db.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Damage updated successfully";
             }
 
             // Update the rental request and redirect to RentalData Index
             _db.RentalRequests.Update(rentalRequest);
             await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Return sent for approval";
 
             return RedirectToAction("Index", "RentalData");
         }
@@ -287,8 +292,7 @@ namespace HajurKoCarRental.Controllers
             rentalRequest.Paid = false;
             rentalRequest.Status = "Returned";
             await _db.SaveChangesAsync();
-
-
+            TempData["SuccessMessage"] = "Created and sent bill successfully";
             return RedirectToAction("Index", "RentalData");
         }
         public async Task<IActionResult> PayDue(int id)
@@ -308,7 +312,7 @@ namespace HajurKoCarRental.Controllers
 
             _db.RentalRequests.Update(rentalRequest);
             await _db.SaveChangesAsync();
-
+            TempData["SuccessMessage"] = "Bill paid successfully";
             return RedirectToAction("CustomerBill", "RentalData");
         }
 

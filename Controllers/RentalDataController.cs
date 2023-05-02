@@ -22,8 +22,9 @@ namespace HajurKoCarRental.Controllers
 
         }
 
+
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index() //show all rental request datas 
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -36,7 +37,8 @@ namespace HajurKoCarRental.Controllers
 
             IQueryable<RentalRequest> rentalRequestsQuery = _db.RentalRequests
                 .Include(r => r.User)
-                .Include(r => r.Car);
+                .Include(r => r.Car)
+                  .Include(r => r.AuthorizedByUser);
 
             if (userType.Contains("Customer"))
             {
@@ -72,6 +74,7 @@ namespace HajurKoCarRental.Controllers
                 //filter according to date match of request date
                 rentalRequestsQuery = rentalRequestsQuery.Where(r => r.RequestDate >= startDate && r.RequestDate <= endDate);
             }
+            else 
 
             if (userType.Contains("Customer"))
             {
@@ -98,6 +101,7 @@ namespace HajurKoCarRental.Controllers
                 .Include(r => r.User)
                 .Include(r => r.Car)
                 .Include(r => r.Damages)
+                 .Include(r => r.AuthorizedByUser)
                 .Where(r => r.User.Id == user.Id && r.Paid != null);
 
             var rentalRequests = await rentalRequestsQuery.ToListAsync();

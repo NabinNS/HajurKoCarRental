@@ -24,7 +24,7 @@ namespace HajurKoCarRental.Controllers
         [Authorize(Roles = "Admin,Staff")]
         public IActionResult Index()
         {
-            var offerlist = _db.Offers.Include(o => o.Car).ToList();
+            var offerlist = _db.Offers.Include(o => o.Car).ToList(); //sending data with car information
             //IEnumerable<Offer> offerlist = _db.Offers;
             return View(offerlist);
         }
@@ -70,6 +70,7 @@ namespace HajurKoCarRental.Controllers
             // add the offer to the database
             _db.Offers.Add(offer);
             _db.SaveChanges();
+            TempData["SuccessMessage"] = "New Offer created successfully";
 
             var customers = await _userManager.GetUsersInRoleAsync("Customer");
             var car = await _db.Cars.FindAsync(int.Parse(carId));
@@ -113,16 +114,14 @@ namespace HajurKoCarRental.Controllers
         public IActionResult CloseOffer(int? id)
         {
             var offerData = _db.Offers.Find(id);
-            if (id == null || id == 0)
+            if (id == null || id == 0 || offerData == null)
             {
-                return NotFound();
-            }
-            if (offerData == null)
-            {
-                return NotFound();
+                TempData["ErrorMessage"] = "Offer closed successfully";
+                return RedirectToAction("Index");
             }
             offerData.Status = false; // Update the offer status to false
             _db.SaveChanges();
+            TempData["SuccessMessage"] = "Offer closed successfully";
 
             return RedirectToAction("Index");
         }
