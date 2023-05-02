@@ -18,6 +18,17 @@
         <div class="card shadow-lg">
             <div class="card-header">
                 <h4 class="fw-bold mb-0 text-center">Bills List</h4>
+                <div class="d-flex justify-content-end">
+                    <div>
+                        <h6 class="text-center m-0">Balance: @ViewBag.Balance</h6>
+                        <button class="btn btn-success btn-sm ms-auto" type="button" data-bs-toggle="modal"
+                                data-bs-target="#AddBalance">
+                            Add Balance
+                        </button>
+                    </div>
+                
+                </div>
+
             </div>
 
        
@@ -52,7 +63,9 @@
                      <td>
                         @if (rentalRequest.Paid == false)
                          {
-                        <a asp-controller="RequestCar" asp-action="PayDue" asp-route-id=@rentalRequest.ReqID class="btn btn-success">Pay</a>
+                        @*<a asp-controller="RequestCar" asp-action="PayDue" asp-route-id=@rentalRequest.ReqID class="btn btn-success">Pay</a>*@
+                      <button onclick="payBill(@rentalRequest.ReqID)" class="btn btn-success">Pay</button>
+
                          }
                          else{
                                     <i class="fas fa-check ms-3"></i>
@@ -69,7 +82,37 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="AddBalance" tabindex="-1" aria-labelledby="AddBalanceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center font" id="AddOfferModalLabel">Add Balance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <form method="post" action="@Url.Action("AddBalance", "User")">
+                <div class="modal-body">
+                  
+                    <div class="form-group">
+                        <label class="form-label" for="OfferDescription">Balance:</label>
+                        <input class="form-control" type="number" id="amount" name="amount" required />
 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Balance</button>
+                </div>
+                <div>
+                    <p class="text-danger text-center mb-1" style="font-size: 12px;">************ Real payment system comming soon ************<p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts{
@@ -80,6 +123,36 @@
        
         });
     </script>
+    <script>
+                function payBill(reqId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Pay this amount for the rental!",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, pay it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the car from the server
+                    $.ajax({
+                        type: "POST",
+                        url: "/RequestCar/PayDue/" + reqId,
+                        success: function (data) {
+                            // Reload the page regardless of success or error
+                            location.reload();
+                          
+                        },
+                        error: function (xhr, status, error) {
+                            // If there was an error, show an error message
+                            Swal.fire('Error', 'An error occurred while paying', 'error');
+                        }
+                    });
+                    }
+                })
+            }
+        </script>
 
 }
 @*<a asp-controller="RequestCar" asp-action="AddRequestCar" asp-route-id="@rentalRequest.ReqID" class="btn btn-success">Approve</a>

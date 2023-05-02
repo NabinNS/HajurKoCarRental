@@ -90,7 +90,7 @@ namespace HajurKoCarRental.Controllers
         [Authorize]
         public async Task<IActionResult> CustomerBill()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User) as ApplicationUser;
 
             if (user == null)
             {
@@ -105,7 +105,7 @@ namespace HajurKoCarRental.Controllers
                 .Where(r => r.User.Id == user.Id && r.Paid != null);
 
             var rentalRequests = await rentalRequestsQuery.ToListAsync();
-
+            ViewBag.Balance = user.Balance;
             return View(rentalRequests);
         }
 

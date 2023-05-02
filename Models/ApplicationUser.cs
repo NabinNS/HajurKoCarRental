@@ -8,7 +8,7 @@ namespace HajurKoCarRental.Models
         [Required]
         public string Name { get; set; }
         public bool IsRegular { get; set; }
-        public int Discount { get; set; }
+        public decimal Balance { get; set; } = 0;
         public bool IsActive { get; set; }
         public string? DrivingLicenseURL { get; set; }
         public string? CitizenshipURL { get; set; }

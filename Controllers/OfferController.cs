@@ -47,6 +47,12 @@ namespace HajurKoCarRental.Controllers
             string endDate = Request.Form["EndDate"];
             string offerDescription = Request.Form["OfferDescription"];
 
+            if (DateTime.Parse(endDate) <= DateTime.Now) //checks current date with inserted date
+            {
+                TempData["ErrorMessage"] = "End date must be greater than today";
+                return RedirectToAction("Index", "Car");
+            }
+
             // Check if there is an existing offer for the car with status true
             var existingOffer = await _db.Offers.FirstOrDefaultAsync(o => o.CarID == int.Parse(carId) && o.Status == true);
 
@@ -74,7 +80,7 @@ namespace HajurKoCarRental.Controllers
 
             var customers = await _userManager.GetUsersInRoleAsync("Customer");
             var car = await _db.Cars.FindAsync(int.Parse(carId));
-            foreach(var customer in customers)
+            foreach(var customer in customers) //sens email to every customer about offer
             {
                 var applicationUser = customer as ApplicationUser;
                 var subject = "New Offer";

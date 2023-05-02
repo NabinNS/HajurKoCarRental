@@ -1,4 +1,5 @@
-﻿using HajurKoCarRental.Data;
+﻿using CloudinaryDotNet;
+using HajurKoCarRental.Data;
 using HajurKoCarRental.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -111,6 +112,7 @@ namespace HajurKoCarRental.Controllers
             if (status == "Rejected")
             {
                 rentalRequest.Car.IsAvailable = true;
+                rentalRequest.ReturnDate = DateTime.Now;
             }
             _db.RentalRequests.Update(rentalRequest);
             await _db.SaveChangesAsync();
@@ -295,26 +297,36 @@ namespace HajurKoCarRental.Controllers
             TempData["SuccessMessage"] = "Created and sent bill successfully";
             return RedirectToAction("Index", "RentalData");
         }
+
         public async Task<IActionResult> PayDue(int id)
         {
-            var rentalRequest = await _db.RentalRequests.FirstOrDefaultAsync(r => r.ReqID == id);
-         
+            var rentalRequest = await _db.RentalRequests
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.ReqID == id);
+
             if (rentalRequest == null)
             {
                 return BadRequest("Invalid rental request ID.");
             }
 
-       
+            if (rentalRequest.User.Balance < rentalRequest.TotalAmount)
+            {
+                TempData["ErrorMessage"] = "Insufficient Balance";
+                return Json(new { errorMessage = "Insufficient Balance" });
+            }
 
             // Update the rental request to mark it as paid
             rentalRequest.Paid = true;
             rentalRequest.PaymentDate = DateTime.Now;
 
+            rentalRequest.User.Balance -= (rentalRequest.TotalAmount ?? 0);
+
             _db.RentalRequests.Update(rentalRequest);
             await _db.SaveChangesAsync();
             TempData["SuccessMessage"] = "Bill paid successfully";
-            return RedirectToAction("CustomerBill", "RentalData");
+            return Json(new { successMessage = "Bill paid successfully" });
         }
+
 
 
 

@@ -34,21 +34,25 @@ namespace HajurKoCarRental.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Color")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
                     b.Property<string>("Manufacturer")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Model")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("RentalRate")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("VehicleNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CarID");
@@ -383,11 +387,11 @@ namespace HajurKoCarRental.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("CitizenshipURL")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Discount")
-                        .HasColumnType("int");
 
                     b.Property<string>("DrivingLicenseURL")
                         .HasColumnType("nvarchar(max)");

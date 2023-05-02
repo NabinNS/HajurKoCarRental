@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "NBLLJmnaqG7qFbpN6+OriswcgJpfgB4PerZatwgmB0E=",
+  "Hash": "ODx8SfAebBVUb235mBNjXTD14qKezjKx3JdU1eXhJQA=",
   "Source": "HajurKoCarRental",
   "BasePath": "_content/HajurKoCarRental",
   "Mode": "Default",
@@ -1222,6 +1222,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Document-Photo\\a14a01ff-8c9a-499a-9a5f-ac06eae4863f acsads-License.jpg"
+    },
+    {
+      "Identity": "G:\\dotnet\\HajurKoCarRental\\wwwroot\\Document-Photo\\b1dbfc25-c392-4912-94fe-8698569209ee test-Citizenship.jpg",
+      "SourceId": "HajurKoCarRental",
+      "SourceType": "Discovered",
+      "ContentRoot": "G:\\dotnet\\HajurKoCarRental\\wwwroot\\",
+      "BasePath": "_content/HajurKoCarRental",
+      "RelativePath": "Document-Photo/b1dbfc25-c392-4912-94fe-8698569209ee test-Citizenship.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Document-Photo\\b1dbfc25-c392-4912-94fe-8698569209ee test-Citizenship.jpg"
     },
     {
       "Identity": "G:\\dotnet\\HajurKoCarRental\\wwwroot\\Document-Photo\\b47de14e-8271-4e61-867a-09e96340ed7b Random Customer-Citizenship.jpg",

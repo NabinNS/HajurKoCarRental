@@ -1,4 +1,5 @@
-﻿using HajurKoCarRental.Areas.Identity.Pages.Account;
+﻿using CloudinaryDotNet;
+using HajurKoCarRental.Areas.Identity.Pages.Account;
 using HajurKoCarRental.Data;
 using HajurKoCarRental.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -146,6 +147,20 @@ namespace HajurKoCarRental.Controllers
 
 
             return RedirectToAction("Index", "Car");
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddBalance()
+        {
+            var user = await _userManager.GetUserAsync(User) as ApplicationUser;
+            // Add the balance to the user's account
+            var amount = decimal.Parse(Request.Form["amount"]);
+            user.Balance += amount;
+
+            // Update the user's details in the database
+            await _userManager.UpdateAsync(user);
+            TempData["SuccessMessage"] = "Balance added successfully";
+
+            return RedirectToAction("CustomerBill", "RentalData");
         }
 
 
