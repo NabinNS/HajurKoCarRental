@@ -42,11 +42,13 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-using (var serviceScope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
-    var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    DbSeeder.SeedUser(app, roleManager).Wait();
+    var serviceProvider = scope.ServiceProvider;
+    await DbSeeder.SeedUser(serviceProvider);
 }
+
+
 
 DbSeeder.SeedCar(app);
 app.Run();

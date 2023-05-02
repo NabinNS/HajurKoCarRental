@@ -12,68 +12,58 @@ namespace HajurKoCarRental.Data
 {
     public class DbSeeder
     {
-        public static async Task SeedUser(IApplicationBuilder applicationBuilder, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedUser(IServiceProvider serviceProvider)
         {
-            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            using (var scope = serviceProvider.CreateScope())
             {
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
                 roleManager.CreateAsync(new IdentityRole(SD.Role_User_Admin)).GetAwaiter().GetResult();
                 roleManager.CreateAsync(new IdentityRole(SD.Role_User_Staff)).GetAwaiter().GetResult();
                 roleManager.CreateAsync(new IdentityRole(SD.Role_User_Cust)).GetAwaiter().GetResult();
 
-                var adminUserEmail = "nabinshrestha348@gmail.com";
-                var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
-                if (adminUser == null)
-                {
-                    var newAdminUser = new ApplicationUser
-                    {
-                        UserName = adminUserEmail,
-                        Name = "Nabin Shrestha",
-                        IsRegular = true,
-                        IsActive = true,
-                        Email = adminUserEmail,
-                        EmailConfirmed = true,
-                        SecurityStamp = Guid.NewGuid().ToString(),
-                        Verified = true,
-                        PaymentDue = false,
-                        PhoneNumber = "9869064300"
-                    };
-                    await userManager.CreateAsync(newAdminUser, "@Nabin123");
-                 
-                    await userManager.AddToRoleAsync(newAdminUser, SD.Role_User_Admin);
-                }
+                await CreateUserIfNotExist(userManager, "nabinshrestha348@gmail.com", "Nabin Shrestha", SD.Role_User_Admin, "9869064300");
+                await CreateUserIfNotExist(userManager, "customer123@gmail.com", "Nabin Shrestha", SD.Role_User_Cust, "123456789");
+            }
+        }
 
-                var customerUserEmail = "customer123@gmail.com";
-                var customerUser = await userManager.FindByEmailAsync(customerUserEmail);
-                if (customerUser == null)
+        private static async Task CreateUserIfNotExist(UserManager<IdentityUser> userManager, string email, string name, string roleName, string phoneNumber)
+        {
+            if (await userManager.FindByEmailAsync(email) == null)
+            {
+                var newUser = new ApplicationUser
                 {
-                    var newcustomerUser = new ApplicationUser
-                    {
-                        UserName = customerUserEmail,
-                        Name = "Nabin Shrestha",
-                        IsRegular = true,
-                        IsActive = true,
-                        Email = customerUserEmail,
-                        EmailConfirmed = true,
-                        SecurityStamp = Guid.NewGuid().ToString(),
-                        Verified = true,
-                        PaymentDue = false,
-                        PhoneNumber = "123456789"
-                    };
-                    await userManager.CreateAsync(newcustomerUser, "@Nabin123");
-                    await userManager.AddToRoleAsync(newcustomerUser, SD.Role_User_Cust);
+                    UserName = email,
+                    Name = name,
+                    IsRegular = true,
+                    IsActive = true,
+                    Email = email,
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    Verified = true,
+                    PaymentDue = false,
+                    PhoneNumber = phoneNumber
+                };
+
+                var result = await userManager.CreateAsync(newUser, "@Nabin123");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(newUser, roleName);
                 }
             }
         }
+
+        //seed car to db if there are no any car at start. this is written to add car in db when the application is first started.
         public static void SeedCar(IApplicationBuilder applicationBuilder)
         {
-            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope()) //creating a new scope for resolving services
             {
                 var db = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-                db.Database.EnsureCreated();
+                db.Database.EnsureCreated(); // ensure db is created.
 
-                if (!db.Cars.Any())
+                if (!db.Cars.Any()) //checks if there are any data in cars db or not.
                 {
                     db.Cars.AddRange(new List<Car>
                     {
@@ -85,7 +75,8 @@ namespace HajurKoCarRental.Data
                             RentalRate = 30000,
                             VehicleNo = "Ba 2 Ka 5678",
                             IsAvailable = true,
-                            CarImageUrl = "https://www.motorbeam.com/wp-content/uploads/Hyperion-XP1-672x414.jpg"
+                            CarImageUrl = "https://hips.hearstapps.com/popularmechanics/assets/17/24/1497377943-dsc-1196asdfa.jpg"
+
                         },
                         new()
                         {
@@ -106,7 +97,8 @@ namespace HajurKoCarRental.Data
                             RentalRate = 40000,
                             VehicleNo = "Ba 4 Ma 3456",
                             IsAvailable = true,
-                            CarImageUrl = "https://images.ecestaticos.com/ebdegeb0L4ZmU_R3jEQsDcWkHBg=/0x0:0x0/1200x1200/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2F641%2F4ed%2Fd51%2F6414edd5121a3789fd5c075ff7df9fe8.jpg"
+                            CarImageUrl = "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+
                         },
                         new()
                         {
@@ -116,7 +108,8 @@ namespace HajurKoCarRental.Data
                             RentalRate = 28000,
                             VehicleNo = "Ba 5 Na 7890",
                             IsAvailable = true,
-                            CarImageUrl = "https://hips.hearstapps.com/popularmechanics/assets/17/24/1497377943-dsc-1196asdfa.jpg"
+                             CarImageUrl = "https://www.motorbeam.com/wp-content/uploads/Hyperion-XP1-672x414.jpg"
+
                         },
                        new()
                         {
@@ -126,7 +119,8 @@ namespace HajurKoCarRental.Data
                             RentalRate = 50000,
                             VehicleNo = "Ba 6 Oa 2345",
                             IsAvailable = true,
-                            CarImageUrl = "https://media.evo.co.uk/image/upload/v1578500236/evo/2020/01/Bugatti%20Veyron-25.jpg"
+                            CarImageUrl = "https://images.ecestaticos.com/ebdegeb0L4ZmU_R3jEQsDcWkHBg=/0x0:0x0/1200x1200/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2F641%2F4ed%2Fd51%2F6414edd5121a3789fd5c075ff7df9fe8.jpg"
+
                         },
                          new()
                         {
@@ -166,7 +160,8 @@ namespace HajurKoCarRental.Data
                             RentalRate = 90000,
                             VehicleNo = "Ba 10 Ta 8901",
                             IsAvailable = true,
-                              CarImageUrl = "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+                            CarImageUrl = "https://media.evo.co.uk/image/upload/v1578500236/evo/2020/01/Bugatti%20Veyron-25.jpg"
+
                         }
                     });
                     db.SaveChanges();
